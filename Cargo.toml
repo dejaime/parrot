@@ -1,0 +1,23 @@
+[package]
+name = "parrot"
+version = "0.1.0"
+edition = "2021"
+
+description = "A very experimental crate for mod support in Bevy Game Engine games"
+authors = ["Dejaime de Oliveira <contact@dejai.me>"]
+license = "MIT OR Apache-2.0 (with or without LLVM-exception)"
+
+[dependencies]
+
+
+homepage = "https://dejai.me/parrot"
+documentation = "https://dejai.me/parrot/docs"
+repository = "https://github.com/dejaime/parrot"
+
+readme = "README.md"
+
+categories = ["game-development", "simulation", "algorithms", "mathematics", "no-std", "no-std::no-alloc"]
+keywords = [
+            "prng", "drng", "random-number-generator", "rng", "simulation", "procedural-generation",
+            "cross-platform", "deterministic", "fixed-point"
+        ]
