@@ -15,7 +15,7 @@ readme = "README.md"
 
 categories = ["game-development", "simulation", "algorithms", "mathematics", "no-std", "no-std::no-alloc"]
 keywords = [
-            "random", "rng", "simulation", "procedural-generation", "gamedev"
+            "random", "rng", "simulation", "procedural", "gamedev"
         ]
 
 [lib]
