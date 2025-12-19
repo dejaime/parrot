@@ -117,3 +117,28 @@ impl Parrot {
         (random_value >> 11) as f64 / (1u64 << 53) as f64
     }
 }
+
+#[cfg(feature = "rand-support")]
+use rand_core::{RngCore, Error};
+
+#[cfg(feature = "rand-support")]
+impl RngCore for Parrot {
+    fn next_u32(&mut self) -> u32 {
+        // We just truncate the u64. This is standard practice.
+        self.next() as u32
+    }
+
+    fn next_u64(&mut self) -> u64 {
+        self.next()
+    }
+
+    fn fill_bytes(&mut self, dest: &mut [u8]) {
+        // rand_core provides a helper to fill byte arrays efficiently using u64 chunks
+        rand_core::impls::fill_bytes_via_next(self, dest)
+    }
+
+    fn try_fill_bytes(&mut self, dest: &mut [u8]) -> Result<(), Error> {
+        self.fill_bytes(dest);
+        Ok(())
+    }
+}

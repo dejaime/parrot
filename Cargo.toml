@@ -28,5 +28,14 @@ lto = true
 opt-level = "z"
 panic = "abort"
 
+[features]
+default = []
+rand-support = ["dep:rand_core"]
+
+[dependencies]
+# Optional dependency for rand compatibility (e.g. allows use of `rand::seq::SliceRandom`)
+rand_core = { version = "0.6", default-features = false, optional = true }
+
 [dev-dependencies]
 num_cpus = "1.16.0"
+rand = "0.8"
