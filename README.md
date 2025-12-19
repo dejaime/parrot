@@ -22,7 +22,7 @@ Add this to your Cargo.toml:
 
 ```toml
 [dependencies]
-parrot = "0.1.3"
+parrot = "0.1.4"
 ```
 
 ## Usage
