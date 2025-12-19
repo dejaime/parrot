@@ -1,13 +1,44 @@
-use crate::hash::fnv1a_64;
 use crate::Parrot;
+use crate::hash::fnv1a_64;
 
-pub struct PerlinNoise {
+/// A deterministic Perlin noise generator.
+///
+/// This generator produces continuous, gradient-based noise (a.k.a. "smooth" noise).
+/// The output is deterministic, meaning it will always produce the same noise for a given seed.
+/// The noise values are in the range `[-1.0, 1.0]`.
+///
+/// The implementation is based on the "Improved Perlin Noise" paper by Ken Perlin.
+/// It is stateless, immutable, and thread-safe.
+///
+/// # Example
+///
+/// ```
+/// use parrot::noise::Perlin;
+///
+/// // Create a new Perlin noise generator with a seed
+/// let perlin = Perlin::new(42);
+///
+/// // Generate a 2D noise value
+/// let value = perlin.noise2d(0.5, 0.2);
+///
+/// println!("Noise value: {}", value);
+/// ```
+pub struct Perlin {
     // 512 bytes is small enough for stack/embedded usage.
     // This table replaces the on-the-fly RNG calls during generation.
     perm: [u8; 512],
 }
 
-impl PerlinNoise {
+impl Perlin {
+    /// Creates a new Perlin noise generator from a 64-bit seed.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use parrot::noise::Perlin;
+    ///
+    /// let perlin = Perlin::new(123);
+    /// ```
     pub fn new(seed: u64) -> Self {
         let mut rng = Parrot::new(seed);
 
@@ -32,9 +63,21 @@ impl PerlinNoise {
         perm[0..256].copy_from_slice(&p);
         perm[256..512].copy_from_slice(&p);
 
-        PerlinNoise { perm }
+        Perlin { perm }
     }
 
+    /// Creates a new Perlin noise generator from a string seed.
+    ///
+    /// The string is hashed using a `FNV-1a` hasher to produce a 64-bit seed.
+    /// This is useful for "named" seeds, like in Minecraft.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use parrot::noise::Perlin;
+    ///
+    /// let perlin = Perlin::new_from_string("hello world");
+    /// ```
     pub fn new_from_string(seed: &str) -> Self {
         let hash = fnv1a_64(seed.as_bytes());
         Self::new(hash)
@@ -77,6 +120,21 @@ impl PerlinNoise {
     }
 
     // Note: &self is now immutable. This is thread-safe and much faster to use.
+    /// Generates a 2D Perlin noise value for the given coordinates.
+    ///
+    /// The input coordinates can be any `f64` values. The noise function
+    /// will wrap around integer boundaries, so the pattern repeats indefinitely.
+    ///
+    /// The output value is always in the range `[-1.0, 1.0]`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use parrot::noise::Perlin;
+    ///
+    /// let perlin = Perlin::new(42);
+    /// let value = perlin.noise2d(10.5, -3.2);
+    /// ```
     pub fn noise2d(&self, x: f64, y: f64) -> f64 {
         let x_floor = Self::floor(x);
         let y_floor = Self::floor(y);

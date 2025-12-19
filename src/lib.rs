@@ -8,32 +8,53 @@
 //! If you run a Parrot RNG with the seed `12345` on a high-end PC, a Raspberry Pi, or in a web browser (WASM),
 //! you will get the **exact same sequence of numbers**.
 //!
-//! ## Features
-//! * **Deterministic:** 100% portable results across architectures (x86, ARM, WASM).
-//! * **Embedded Friendly:** `#[no_std]` by default. No external dependencies.
-//! * **String Seeds:** "minecraft"-style text seeds supported out of the box.
-//! * **Perlin Noise:** Includes a stateless, immutable 2D noise generator.
 //!
-//! ## Quick Start
+//! ## Features
+//!
+//! * **Deterministic:** 100% portable results across all major architectures (x86, ARM, WASM).
+//! * **`#[no_std]`:** Works in embedded, resource-constrained, and bare-metal environments.
+//! * **String Seeds:** Use human-readable strings like "mountain" or "level-1" to seed your generators.
+//! * **Perlin Noise:** A stateless, immutable, and thread-safe 2D noise generator.
+//!
+//! ## Quick Start: RNG
 //!
 //! ```rust
 //! use parrot::Parrot;
 //!
-//! // 1. Create an RNG from a seed
+//! // Create a new RNG from a seed
 //! let mut rng = Parrot::new(42);
-//! // Or using a string
-//! let mut rng = Parrot::new_from_str("parrot");
 //!
-//! // 2. Generate numbers
+//! // Or from a string
+//! let mut rng_from_str = Parrot::new_from_str("hello world");
+//!
+//! // Generate a number between 0 and 99
 //! let x = rng.gen_range(0, 100);
+//!
 //! println!("Random number: {}", x);
+//! ```
+//!
+//! ## Quick Start: Perlin Noise
+//!
+//! ```rust
+//! use parrot::Perlin;
+//!
+//! // Create a Perlin noise generator from a seed
+//! let noise = Perlin::new(123);
+//!
+//! // Or from a string
+//! let noise_from_str = Perlin::new_from_string("a-stable-seed");
+//!
+//! // Get a noise value at a 2D coordinate
+//! let value = noise.noise2d(0.5, 0.2);
+//!
+//! println!("Noise value: {}", value);
 //! ```
 
 pub mod hash;
 pub mod noise;
 pub mod rand;
 
-pub use noise::PerlinNoise;
+pub use noise::Perlin;
 pub use rand::Parrot;
 
 // We need std for tests to use Vectors and Print checks
@@ -130,8 +151,8 @@ mod tests {
     // 5. NOISE REPEATABILITY
     #[test]
     fn test_noise_repeatability() {
-        let noise1 = PerlinNoise::new_from_string("test-seed");
-        let noise2 = PerlinNoise::new_from_string("test-seed");
+        let noise1 = Perlin::new_from_string("test-seed");
+        let noise2 = Perlin::new_from_string("test-seed");
         assert_eq!(noise1.noise2d(10.5, 20.1), noise2.noise2d(10.5, 20.1));
     }
 
@@ -173,7 +194,7 @@ mod tests {
         assert_eq!(Parrot::new_from_str("").gen_range(0, 100), val_empty);
 
         // 5. Perlin Noise String Seed
-        let noise_str = PerlinNoise::new_from_string("parrot");
+        let noise_str = Perlin::new_from_string("parrot");
         let noise_val = noise_str.noise2d(1.0, 2.0);
         assert_eq!(
             noise_str.noise2d(1.0, 2.0),
