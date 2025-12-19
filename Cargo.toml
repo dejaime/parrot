@@ -8,6 +8,7 @@ authors = ["Dejaime de Oliveira <contact@dejai.me>"]
 license = "MIT OR Apache-2.0 OR GPL-3.0-only OR LGPL-3.0-only"
 
 repository = "https://github.com/dejaime/parrot"
+documentation = "https://docs.rs/crate/parrot-rng/latest"
 readme = "README.md"
 
 
