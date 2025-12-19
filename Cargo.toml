@@ -15,8 +15,7 @@ readme = "README.md"
 
 categories = ["game-development", "simulation", "algorithms", "mathematics", "no-std", "no-std::no-alloc"]
 keywords = [
-            "prng", "drng", "random-number-generator", "rng", "simulation", "procedural-generation",
-            "cross-platform", "deterministic", "fixed-point"
+            "random-number-generator", "rng", "simulation", "procedural-generation"
         ]
 
 [lib]
