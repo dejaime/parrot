@@ -1,6 +1,6 @@
 [package]
 name = "parrot-rng"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 
 description = "A lightweight, strictly deterministic procedural generation library for Rust"
