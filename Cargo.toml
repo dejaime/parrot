@@ -7,9 +7,7 @@ description = "A lightweight, strictly deterministic procedural generation libra
 authors = ["Dejaime de Oliveira <contact@dejai.me>"]
 license = "MIT OR Apache-2.0 OR GPL-3.0-only OR LGPL-3.0-only"
 
-homepage = "https://dejai.me/parrot-rng"
-documentation = "https://dejai.me/parrot-rng/docs"
-repository = "https://github.com/dejaime/parrot-rng"
+repository = "https://github.com/dejaime/parrot"
 readme = "README.md"
 
 
