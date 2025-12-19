@@ -23,7 +23,7 @@ Add this to your Cargo.toml:
 
 ```toml
 [dependencies]
-parrot = "0.1.5"
+parrot = "0.1.6"
 ```
 
 Or alternativelly, if you want `rand` support:
