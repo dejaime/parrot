@@ -1,8 +1,8 @@
 # Parrot 🦜
 
 [![CI](https://github.com/dejaime/parrot/actions/workflows/ci.yml/badge.svg)](https://github.com/dejaime/parrot/actions/workflows/ci.yml)
-[![Crates.io](https://img.shields.io/crates/v/parrot.svg)](https://crates.io/crates/parrot)
-[![License](https://img.shields.io/crates/l/parrot.svg)](https://crates.io/crates/parrot)
+[![Crates.io](https://img.shields.io/crates/v/parrot-rng.svg)](https://crates.io/crates/parrot-rng)
+[![License](https://img.shields.io/crates/l/parrot-rng.svg)](https://crates.io/crates/parrot-rng)
 
 Parrot is a lightweight, strictly deterministic procedural generation library for Rust. It is designed to produce identical results across all platforms (x86, ARM, WASM) and is fully compatible with embedded (no_std) environments.
 
