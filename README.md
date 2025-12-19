@@ -1,4 +1,4 @@
-# Parrot
+# Parrot 🦜
 
 [![CI](https://github.com/dejaime/parrot/actions/workflows/ci.yml/badge.svg)](https://github.com/dejaime/parrot/actions/workflows/ci.yml)
 [![Crates.io](https://img.shields.io/crates/v/parrot.svg)](https://crates.io/crates/parrot)
