@@ -26,6 +26,13 @@ Add this to your Cargo.toml:
 parrot = "0.1.5"
 ```
 
+Or alternativelly, if you want `rand` support:
+
+```toml
+[dependencies]
+parrot-rng = { version = "0.2.0", features = ["rand-support"] }
+```
+
 ## Usage
 1. Repeatable Random Numbers
 
@@ -62,6 +69,26 @@ fn main() {
     let height = noise.noise2d(10.5, 20.0);
     
     println!("Height: {}", height);
+}
+```
+
+3. Ecosystem Compatibility (rand-support)
+
+Requires `features = ["rand-support"]`
+
+Parrot can act as a standard RngCore, allowing you to use it with the rest of the Rust ecosystem.
+```rust
+use parrot::Parrot;
+use rand::seq::SliceRandom; // From the 'rand' crate
+
+fn main() {
+    let mut rng = Parrot::new(42);
+    let mut deck = vec!["Ace", "King", "Queen", "Jack"];
+
+    // Use standard rand methods!
+    deck.shuffle(&mut rng);
+    
+    println!("Shuffled: {:?}", deck);
 }
 ```
 
