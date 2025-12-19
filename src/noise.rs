@@ -1,3 +1,4 @@
+use crate::hash::fnv1a_64;
 use crate::Parrot;
 
 pub struct PerlinNoise {
@@ -32,6 +33,11 @@ impl PerlinNoise {
         perm[256..512].copy_from_slice(&p);
 
         PerlinNoise { perm }
+    }
+
+    pub fn new_from_string(seed: &str) -> Self {
+        let hash = fnv1a_64(seed.as_bytes());
+        Self::new(hash)
     }
 
     #[inline(always)]

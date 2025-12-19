@@ -34,7 +34,9 @@ Generate numbers that are guaranteed to be the same on every machine for a given
 use parrot::Parrot;
 
 fn main() {
-    let mut rng = Parrot::new(12345);
+	let mut rng = Parrot::new_from_str("parrot");
+    // Also supports u64
+	//		let mut rng = Parrot::new(12345);
 
     // Generate values
     let val = rng.gen_range(0, 100);

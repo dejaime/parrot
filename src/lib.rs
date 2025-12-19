@@ -1,5 +1,34 @@
 #![no_std]
 
+//! # Parrot RNG 🦜
+//!
+//! **Parrot** (`parrot-rng`) is a lightweight, strictly deterministic procedural generation library.
+//!
+//! It is designed for game development, generative art, and embedded systems where reproducibility is critical.
+//! If you run a Parrot RNG with the seed `12345` on a high-end PC, a Raspberry Pi, or in a web browser (WASM),
+//! you will get the **exact same sequence of numbers**.
+//!
+//! ## Features
+//! * **Deterministic:** 100% portable results across architectures (x86, ARM, WASM).
+//! * **Embedded Friendly:** `#[no_std]` by default. No external dependencies.
+//! * **String Seeds:** "minecraft"-style text seeds supported out of the box.
+//! * **Perlin Noise:** Includes a stateless, immutable 2D noise generator.
+//!
+//! ## Quick Start
+//!
+//! ```rust
+//! use parrot::Parrot;
+//!
+//! // 1. Create an RNG from a seed
+//! let mut rng = Parrot::new(42);
+//! // Or using a string
+//! let mut rng = Parrot::new_from_str("parrot");
+//!
+//! // 2. Generate numbers
+//! let x = rng.gen_range(0, 100);
+//! println!("Random number: {}", x);
+//! ```
+
 pub mod hash;
 pub mod noise;
 pub mod rand;
@@ -101,8 +130,8 @@ mod tests {
     // 5. NOISE REPEATABILITY
     #[test]
     fn test_noise_repeatability() {
-        let noise1 = PerlinNoise::new(555);
-        let noise2 = PerlinNoise::new(555);
+        let noise1 = PerlinNoise::new_from_string("test-seed");
+        let noise2 = PerlinNoise::new_from_string("test-seed");
         assert_eq!(noise1.noise2d(10.5, 20.1), noise2.noise2d(10.5, 20.1));
     }
 
@@ -142,5 +171,14 @@ mod tests {
         let mut rng_empty = Parrot::new_from_str("");
         let val_empty = rng_empty.gen_range(0, 100);
         assert_eq!(Parrot::new_from_str("").gen_range(0, 100), val_empty);
+
+        // 5. Perlin Noise String Seed
+        let noise_str = PerlinNoise::new_from_string("parrot");
+        let noise_val = noise_str.noise2d(1.0, 2.0);
+        assert_eq!(
+            noise_str.noise2d(1.0, 2.0),
+            noise_val,
+            "Perlin noise from string seed is not deterministic"
+        );
     }
 }
