@@ -43,7 +43,7 @@ dependencies = [
 
 [[package]]
 name = "parrot-rng"
-version = "0.1.5"
+version = "0.1.6"
 dependencies = [
  "num_cpus",
  "rand",
