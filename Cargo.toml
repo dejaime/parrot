@@ -3,7 +3,7 @@ name = "parrot-rng"
 version = "0.1.0"
 edition = "2024"
 
-description = "A very experimental crate for mod support in Bevy Game Engine games"
+description = "A lightweight, strictly deterministic procedural generation library for Rust"
 authors = ["Dejaime de Oliveira <contact@dejai.me>"]
 license = "MIT OR Apache-2.0 OR GPL-3.0-only OR LGPL-3.0-only"
 
