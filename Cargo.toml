@@ -13,7 +13,7 @@ repository = "https://github.com/dejaime/parrot-rng"
 readme = "README.md"
 
 
-categories = ["game-development", "simulation", "algorithms", "mathematics", "no-std", "no-std::no-alloc"]
+categories = ["game-development", "simulation", "algorithms", "no-std"]
 keywords = [
             "random", "rng", "simulation", "procedural", "gamedev"
         ]
