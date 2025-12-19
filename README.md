@@ -75,10 +75,9 @@ Bash
 Check the example `demo.rs`, and you can find your own test seeds with the example brute force example.
 
 ```shell
-$ cargo run --release --example brute_force_finder "hiworld" 10b
-Searching for seed to generate: "hiworld"
-Found 6 matching seeds in range 0-10000000000
-Seeds for "hiworld": [5777589502, 7350105210, 7486556789, 7974651552, 8322618982, 9935743809]
+$ cargo run --release --example brute_force_finder "parrot" 100M
+Found 2 matching seeds in range 0-100000000
+Seeds for "parrot": [12493373, 24602289]
 ```
 
 ## License
