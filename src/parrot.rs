@@ -64,7 +64,7 @@ impl Parrot {
     }
 
     #[inline(always)]
-    fn next(&mut self) -> u64 {
+    pub fn next_64(&mut self) -> u64 {
         // Xoroxiro is multiplication based, a 0 seed can only generate 0
         let state0 = self.state[0];
         let mut state1 = self.state[1];
@@ -75,6 +75,14 @@ impl Parrot {
         self.state[1] = state1.rotate_left(37);
 
         result
+    }
+
+    /// Generates a random `u64`.
+    ///
+    /// This is a shortcut for `next()`.
+    #[inline(always)]
+    pub fn next(&mut self) -> u64 {
+        self.next_64()
     }
 
     /// Generates a random integer in the range `[min, max)`.
@@ -111,9 +119,9 @@ impl Parrot {
     /// use parrot::Parrot;
     ///
     /// let mut rng = Parrot::new(42);
-    /// let f = rng.gen_f64(); // 0.0 <= f < 1.0
+    /// let f = rng.next_f64(); // 0.0 <= f < 1.0
     /// ```
-    pub fn gen_f64(&mut self) -> f64 {
+    pub fn next_f64(&mut self) -> f64 {
         let random_value = self.next();
         (random_value >> 11) as f64 / (1u64 << 53) as f64
     }

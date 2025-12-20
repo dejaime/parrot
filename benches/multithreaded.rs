@@ -50,7 +50,7 @@ fn bench_parrot_scaling(c: &mut Criterion) {
 
                                     #[cfg(not(feature = "rand-support"))]
                                     {
-                                        black_box(rng.gen_f64());
+                                        black_box(rng.next_f64());
                                     }
                                 }
                             });
