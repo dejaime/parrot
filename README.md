@@ -17,56 +17,6 @@ Parrot is a no dependency, lightweight, strictly deterministic procedural genera
 
 - Deterministic and Thread Safe Perlin Noise: Spatially coherent 2D noise that uses a static permutation table (no "TV static" artifacts or mutable state). The noise generator is immutable (&self) and can be shared across threads without locking.
 
-## Benchmarks 🚀
-
-Parrot is tuned for extreme performance. On a standard modern CPU, it generates random numbers in **sub-nanosecond** time, outperforming even the standard Rust `SmallRng`.
-
-| Generator | Time per u64 | Ops / Sec | Notes |
-|-----------|--------------|-----------|-------|
-| StdRng | 2.99 ns | ~334 Million | `rand::rngs::StdRng` |
-| SmallRng | 0.88 ns | ~1.13 Billion | `rand::rngs::SmallRng` |
-| **Parrot** | **0.88 ns** | **~1.14 Billion** | `Xoroshiro128+` |
-
-*Benchmarks run on Linux x86_64, single-threaded on a Ryzen 7 modern CPU.*
-
-| Generator | Time per u64 | Ops / Sec | Notes |
-|-----------|--------------|-----------|-------|
-| StdRng | 2.99 ns | ~334 Million | `rand::rngs::StdRng` |
-| Perlin 2D | 3.28 ns | ~305 Million | Gradient Noise Lookup |
-
-This means we are generating gradient noise almost as fast as a standard crypto RNG generates a plain integers!
-
-To run these benchmarks yourself:
-```bash
-cargo bench --features rand-support
-```
-
-### Multithreaded Performance ⚡
-
-Parrot scales linearly across cores. Because the noise generator is immutable and lock-free, adding more threads yields a near-perfect speedup.
-
-| Threads | RNG Throughput | Perlin Throughput | Speedup |
-|---------|----------------|-------------------|---------|
-| 1       | 1.14 Billion/s | 121 Million/s     | 1.0x    |
-| 2       | 2.22 Billion/s | 237 Million/s     | 1.96x   |
-| 4       | 4.33 Billion/s | 462 Million/s     | 3.83x   |
-| 8       | 8.29 Billion/s | 869 Million/s     | 7.18x   |
-
-*Benchmarks run on Linux x86_64, on a Ryzen 7 modern CPU.*
-*Up to 8 threads run on a 16-core CPU. Scaling is effectively linear until hardware saturation.*
-
-To run these benchmarks yourself:
-```bash
-cargo bench --bench multithreaded --features rand-support
-```
-
-### Why is it fast?
-
-Parrot does not need to be cryptographically secure!
-
-Differently from a deterministic random number generator, `StdRng` is used in a lot of security sensitive contexts.
-
-Run them with `cargo bench --features rand-support`
 
 ## Installation
 
@@ -161,6 +111,56 @@ $ cargo run --release --example brute_force_finder "parrot" 100M
 Found 2 matching seeds in range 0-100000000
 Seeds for "parrot": [12493373, 24602289]
 ```
+## Benchmarks 🚀
+
+Parrot is tuned for extreme performance. On a standard modern CPU, it generates random numbers in **sub-nanosecond** time, outperforming even the standard Rust `SmallRng`.
+
+| Generator | Time per u64 | Ops / Sec | Notes |
+|-----------|--------------|-----------|-------|
+| StdRng | 2.99 ns | ~334 Million | `rand::rngs::StdRng` |
+| SmallRng | 0.88 ns | ~1.13 Billion | `rand::rngs::SmallRng` |
+| **Parrot** | **0.88 ns** | **~1.14 Billion** | `Xoroshiro128+` |
+
+*Benchmarks run on Linux x86_64, single-threaded on a Ryzen 7 modern CPU.*
+
+| Generator | Time per u64 | Ops / Sec | Notes |
+|-----------|--------------|-----------|-------|
+| StdRng | 2.99 ns | ~334 Million | `rand::rngs::StdRng` |
+| Perlin 2D | 3.28 ns | ~305 Million | Gradient Noise Lookup |
+
+This means we are generating gradient noise almost as fast as a standard crypto RNG generates a plain integers!
+
+To run these benchmarks yourself:
+```bash
+cargo bench --features rand-support
+```
+
+### Multithreaded Performance ⚡
+
+Parrot scales linearly across cores. Because the noise generator is immutable and lock-free, adding more threads yields a near-perfect speedup.
+
+| Threads | RNG Throughput | Perlin Throughput | Speedup |
+|---------|----------------|-------------------|---------|
+| 1       | 1.14 Billion/s | 121 Million/s     | 1.0x    |
+| 2       | 2.22 Billion/s | 237 Million/s     | 1.96x   |
+| 4       | 4.33 Billion/s | 462 Million/s     | 3.83x   |
+| 8       | 8.29 Billion/s | 869 Million/s     | 7.18x   |
+
+*Benchmarks run on Linux x86_64, on a Ryzen 7 modern CPU.*
+*Up to 8 threads run on a 16-core CPU. Scaling is effectively linear until hardware saturation.*
+
+To run these benchmarks yourself:
+```bash
+cargo bench --bench multithreaded --features rand-support
+```
+
+### Why is it fast?
+
+Parrot does not need to be cryptographically secure!
+
+Differently from a deterministic random number generator, `StdRng` is used in a lot of security sensitive contexts.
+
+Run them with `cargo bench --features rand-support
 
 ## License
 
