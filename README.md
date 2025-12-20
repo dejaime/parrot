@@ -11,11 +11,33 @@ Parrot is a no dependency, lightweight, strictly deterministic procedural genera
 
     Lightweight: Implements Xoroshiro128+ for high-performance random number generation.
 
-    Deterministic Perlin Noise: Spatially coherent 2D noise that uses a static permutation table (no "TV static" artifacts or mutable state).
-
     Embedded Ready: no_std by default, supports anything from ARM to WASM to embedded use cases.
 
-    Thread Safe: The noise generator is immutable (&self) and can be shared across threads without locking.
+	String Seeding: Use `u64` or `str` seeds for creative products and games!
+
+    Deterministic Perlin Noise: Spatially coherent 2D noise that uses a static permutation table (no "TV static" artifacts or mutable state).
+
+    Thread Safe Perlin Noise: The noise generator is immutable (&self) and can be shared across threads without locking.
+
+## Benchmarks 🚀
+
+Parrot is tuned for speed. On a standard desktop CPU (Ryzen 9), it outperforms the standard Rust `SmallRng`:
+
+| Generator | Time per u64 | Ops / Sec | Notes |
+|-----------|--------------|-----------|-------|
+| StdRng | 3.20 ns | ~312 Million | `rand::rngs::StdRng` |
+| SmallRng | 0.94 ns | ~1.0 Billion | `rand::rngs::SmallRng` |
+| **Parrot** | **0.90 ns** | **~1.1 Billion** | `Xoroshiro128+` |
+
+*Benchmarks run on Linux x86_64, single-threaded.*
+
+### Why is it faster?
+
+Parrot does not need to be cryptographically secure!
+
+Differently from a deterministic random number generator, `StdRng` is used in a lot of security sensitive contexts.
+
+Run them with `cargo bench --features rand-support`
 
 ## Installation
 

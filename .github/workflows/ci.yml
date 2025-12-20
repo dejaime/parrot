@@ -23,11 +23,25 @@ jobs:
     - name: Set up Rust
       run: rustup update stable
 
+    # 1. Standard Build
     - name: Build
       run: cargo build --verbose
 
-    - name: Run Tests
+    # 2. Test Default Features
+    - name: Run Tests (Default)
       run: cargo test --verbose
+
+    # 3. Test rand support
+    - name: Run Tests (Feature: rand-support)
+      run: cargo test --verbose --features rand-support
+
+    # 4. Check Benchmarks compiles
+    - name: Check Benchmarks Compile
+      run: cargo bench --verbose --features rand-support --no-run
+
+    # 5. Verify Examples
+    - name: Run Example Sanity Check
+      run: cargo run --example run_rng_range -- hello 0 10 1000
 
   lint:
     name: Lint & Fmt
@@ -41,4 +55,5 @@ jobs:
         run: cargo fmt -- --check
 
       - name: Check Clippy (Lints)
-        run: cargo clippy -- -D warnings
+        run: cargo clippy --features rand-support -- -D warnings
+

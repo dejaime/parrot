@@ -52,7 +52,7 @@
 
 pub mod hash;
 pub mod noise;
-pub mod rand;
+pub mod parrot;
 
 pub use noise::Perlin;
-pub use rand::Parrot;
+pub use parrot::Parrot;
