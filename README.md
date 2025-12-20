@@ -51,7 +51,7 @@ fn main() {
     let u64_val = rng.next_u64(); // [0, u64::MAX]
     let f64_val = rng.next_f64(); // [0.0, 1.0)
 
-    println!("Deterministic value: {}", val);
+    println!("Deterministic value: {}, {}, {}", val, u64_val, f64_val);
 }
 ```
 
@@ -59,7 +59,7 @@ fn main() {
 
 Generate smooth, continuous noise for terrain, clouds, or textures.
 ```rust
-use parrot::Perlin; // Ensure this matches your struct name!
+use parrot::Perlin;
 
 fn main() {
     // The seed determines the "shape" of the terrain
@@ -136,7 +136,7 @@ Parrot is strictly deterministic. This means we can "brute force" a seed that fo
 We included a tool that finds a seed which generates your specific word when mapped to ASCII characters.
 Bash
 
-# Find a seed that generates the word "parrot"
+### Find a seed that generates "parrot"
 
 ```shell
 $ cargo run --release --example brute_force_finder "parrot" 100M
@@ -154,7 +154,7 @@ You can then verify this behavior using the demo example, which hardcodes these 
 Verify the uniformity of the RNG by simulating a large number of die rolls.
 Bash
 
-# Roll a 10-sided die (0-10) 500,000 times
+### Roll a 10-sided die (0-10) 500,000 times
 
 Output:
 ```shell
@@ -221,8 +221,6 @@ Parrot does not need to be cryptographically secure!
 The security requirements are different for a deterministic random number generator. We do not have to be cryptographically secure as `StdRng` does.
 
 Parrot is not supposed to be used in high security sensitive contexts, and can optimise for speed.
-
-Run them with `cargo bench --features rand-support
 
 ## License
 
