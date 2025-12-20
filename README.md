@@ -94,23 +94,84 @@ fn main() {
 }
 ```
 
-## Examples
-The "Hello World"
+Parrot comes with several examples to demonstrate its features, from visual terrain generation to statistical verification.
+1. Procedural Terrain (Perlin Noise)
 
-This repository includes a brute-force tool to demonstrate determinism. You can find a seed that forces the RNG to generate a specific string (like "hello" or your name).
+Generate an ASCII terrain map using 2D Perlin noise. You can pass any string (like your name or a location) as a seed.
+You should see the exact same pattern if running on your local system.
 
-Run the finder example to discover a seed for your own word:
+`# Usage: cargo run --example perlin <SEED_STRING> <WIDTH> <HEIGHT>`
+
+```rust
+$ cargo run --example perlin "archipelago" 60 20
+Parrot Perlin Noise Demo
+Input: "archipelago" (Seed: 8873276094910301339)
+Size: 60x20
+------------------------------------------------------------
+~...~~~.......~~~~~~~......~~~~~~~......~~~~~~~~~~~~~~...~~~
+........∩∩∩∩....~~~~..∩..~~~~~~.........~~   ~~~~~~~~....~~~
+.......∩∩∩∩∩∩∩∩.........~~   ~~.∩∩∩∩...~~          ~..∩∩.~  
+.∩∩∩∩∩∩∩▲▲▲∩∩∩∩∩∩......~~     ~.∩∩∩∩..~~~~         ~..∩∩.~~ 
+.∩∩∩∩∩∩∩∩∩∩∩∩∩∩∩∩..~~~~~~~    ~.∩∩∩∩.~~~~~~~~~      ~..∩∩.~ 
+.......∩∩∩∩∩∩∩∩∩∩..~~~~~~~~   ~..∩...~~~~....~~     ~..∩∩..~
+....................~~~~~.~~~ ~~....~~~~~.∩∩∩.~~    ~~..∩∩..
+~~~~~~~~~~~~~~~......~~.....~~~~~~~~~~~~~.∩∩∩∩..~   ~~.∩∩∩∩.
+~~~~~~~~~~~~~~~~..∩∩....∩∩∩..~~~~~~~   ~~.∩∩∩∩∩..~ ~~..∩∩▲∩∩
+~        ~~~~~~~..∩∩...∩∩∩∩∩..~         ~..∩∩∩∩∩...~...∩∩▲▲∩
+~        ~~~~~........∩∩∩∩∩∩∩.~         ~~.∩∩∩∩∩∩∩∩∩...∩∩▲▲▲
+~~      ~~.......~....∩∩∩∩∩∩∩.~~        ~~...∩∩∩∩▲▲∩∩...∩∩∩∩
+~~     ~~.......~~~~..∩∩∩.....~~~~~     ~~......∩∩▲∩∩.....∩∩
+~~    ~~.......~~~~~..........~~~~~~~  ~~...~~~..∩∩∩..~~~...
+~~   ~~..∩..~~~~~~~~~....~~~~~~.....~~~~....~~~~.∩∩∩.~~~~~..
+~~   ~..∩∩..~~~~~~~~~...~~~ ~~~......~~.....~~~~.....~~~~~~~
+~    ~~..∩..~~~~~~~~~..~~     ~~~...........~~~~.....~~~~~..
+~     ~.............~~~~        ~~.....~~~~~...........~....
+~     ~~............~~~          ~~....~~~~~.....~..........
+~     ~~.........∩..~~~ ~~~~~    ~~.∩∩..~~~~....~~~~........
+```
+
+2. Reverse-Engineering Seeds ("Hello World")
+
+Parrot is strictly deterministic. This means we can "brute force" a seed that forces the RNG to generate a specific sequence of numbers.
+
+We included a tool that finds a seed which generates your specific word when mapped to ASCII characters.
 Bash
 
-## Find a seed that generates "parrot"
-
-Check the example `demo.rs`, and you can find your own test seeds with the example brute force example.
+# Find a seed that generates the word "parrot"
 
 ```shell
 $ cargo run --release --example brute_force_finder "parrot" 100M
+Searching for seed to generate: "parrot"
+Search Range: 0..100000000 seeds
+--------------------------------------------------
 Found 2 matching seeds in range 0-100000000
 Seeds for "parrot": [12493373, 24602289]
 ```
+
+You can then verify this behavior using the demo example, which hardcodes these discovered seeds to print "Hello World".
+
+3. Statistical Distribution Check
+
+Verify the uniformity of the RNG by simulating a large number of die rolls.
+Bash
+
+# Roll a 10-sided die (0-10) 500,000 times
+
+Output:
+``shell
+$ cargo run --release --example run_rng_range -- "test_seed" 0 10 500000
+
+🦜 Rolling 500000 times (Range: [0, 10), Seed: "test_seed")...
+
+Value      | Count      | Percent   
+-----------+------------+-----------
+0          | 50123      | 10.02 %
+1          | 49890      | 9.98  %
+2          | 50005      | 10.00 %
+...
+```
+All values should hover close to 10.00%
+
 ## Benchmarks 🚀
 
 Parrot is tuned for extreme performance. On a standard modern CPU, it generates random numbers in **sub-nanosecond** time, outperforming even the standard Rust `SmallRng`.
