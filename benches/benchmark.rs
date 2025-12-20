@@ -1,8 +1,13 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use parrot::Parrot;
+
+#[cfg(feature = "rand-support")]
 use rand::prelude::*;
+
+#[cfg(feature = "rand-support")]
 use rand::rngs::{SmallRng, StdRng};
 
+#[cfg(feature = "rand-support")]
 fn bench_rng_generation(c: &mut Criterion) {
     let mut group = c.benchmark_group("RNG Throughput");
 
