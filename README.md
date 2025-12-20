@@ -24,10 +24,10 @@ Add this to your Cargo.toml:
 
 ```toml
 [dependencies]
-parrot = "0.4.0"
+parrot-rng = "0.4.0"
 ```
 
-Or alternativelly, if you want `rand` support:
+Or alternatively, if you want `rand` support:
 
 ```toml
 [dependencies]
@@ -43,14 +43,13 @@ Generate numbers that are guaranteed to be the same on every machine for a given
 use parrot::Parrot;
 
 fn main() {
-	let mut rng = Parrot::new_from_str("parrot");
-    // Also supports u64
-	//		let mut rng = Parrot::new(12345);
+    // Use a string or a u64 seed
+    let mut rng = Parrot::new_from_str("parrot");
 
     // Generate values
     let val = rng.gen_range(0, 100);
-    let u64_val = rng.next_u64(); // [0 to u64::MAX]
-    let f64_val = rng.next_f64(); // [0.0 to 1.0)
+    let u64_val = rng.next_u64(); // [0, u64::MAX]
+    let f64_val = rng.next_f64(); // [0.0, 1.0)
 
     println!("Deterministic value: {}", val);
 }
@@ -60,11 +59,11 @@ fn main() {
 
 Generate smooth, continuous noise for terrain, clouds, or textures.
 ```rust
-use parrot::PerlinNoise;
+use parrot::Perlin; // Ensure this matches your struct name!
 
 fn main() {
     // The seed determines the "shape" of the terrain
-    let noise = PerlinNoise::new(98765);
+    let noise = Perlin::new(98765);
 
     // Get the height at coordinate (10.5, 20.0)
     // This is immutable and thread-safe!
@@ -219,7 +218,9 @@ cargo bench --bench multithreaded --features rand-support
 
 Parrot does not need to be cryptographically secure!
 
-Differently from a deterministic random number generator, `StdRng` is used in a lot of security sensitive contexts.
+The security requirements are different for a deterministic random number generator. We do not have to be cryptographically secure as `StdRng` does.
+
+Parrot is not supposed to be used in high security sensitive contexts, and can optimise for speed.
 
 Run them with `cargo bench --features rand-support
 
