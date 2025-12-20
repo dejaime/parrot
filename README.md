@@ -99,7 +99,8 @@ fn main() {
 
     // Generate values
     let val = rng.gen_range(0, 100);
-    let float_val = rng.gen_f64(); // 0.0 to 1.0
+    let u64_val = rng.next_u64(); // [0 to u64::MAX]
+    let f64_val = rng.next_f64(); // [0.0 to 1.0)
 
     println!("Deterministic value: {}", val);
 }
