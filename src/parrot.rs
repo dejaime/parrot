@@ -119,7 +119,7 @@ impl Parrot {
 }
 
 #[cfg(feature = "rand-support")]
-use rand_core::{RngCore, Error};
+use rand_core::{Error, RngCore};
 
 #[cfg(feature = "rand-support")]
 impl RngCore for Parrot {

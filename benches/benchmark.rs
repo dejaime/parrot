@@ -1,4 +1,6 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{Criterion, black_box, criterion_group, criterion_main};
+
+#[cfg(feature = "rand-support")]
 use parrot::Parrot;
 
 #[cfg(feature = "rand-support")]
@@ -35,6 +37,12 @@ fn bench_rng_generation(c: &mut Criterion) {
     group.finish();
 }
 
+// Dummy for when rand-support is not enabled
+#[cfg(not(feature = "rand-support"))]
+fn bench_rng_generation(_: &mut Criterion) {
+    println!("Skipping RNG benchmarks (enable 'rand-support' feature to run)");
+}
+
 fn bench_perlin_noise(c: &mut Criterion) {
     let mut group = c.benchmark_group("Noise Generation");
     let perlin = parrot::Perlin::new(42);
@@ -45,7 +53,7 @@ fn bench_perlin_noise(c: &mut Criterion) {
             black_box(perlin.noise2d(10.5, 20.5))
         })
     });
-    
+
     group.finish();
 }
 
