@@ -24,14 +24,14 @@ Add this to your Cargo.toml:
 
 ```toml
 [dependencies]
-parrot-rng = "0.4.0"
+parrot-rng = "0.4.1"
 ```
 
 Or alternatively, if you want `rand` support:
 
 ```toml
 [dependencies]
-parrot-rng = { version = "0.4.0", features = ["rand-support"] }
+parrot-rng = { version = "0.4.1", features = ["rand-support"] }
 ```
 
 ## Usage
@@ -97,7 +97,7 @@ Parrot comes with several examples to demonstrate its features, from visual terr
 1. Procedural Terrain (Perlin Noise)
 
 Generate an ASCII terrain map using 2D Perlin noise. You can pass any string (like your name or a location) as a seed.
-You should see the exact same pattern if running on your local system.
+You should see the exact same pattern if running on your local system with `"archipelago" 60 20`
 
 `# Usage: cargo run --example perlin <SEED_STRING> <WIDTH> <HEIGHT>`
 
