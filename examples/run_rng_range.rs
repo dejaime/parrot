@@ -28,9 +28,7 @@ fn main() {
     let mut rng = Parrot::new_from_str(seed_str);
     let mut counts: BTreeMap<u64, usize> = BTreeMap::new();
 
-    println!(
-        "🦜 Rolling {count} times (Range: [{min}, {max}), Seed: \"{seed_str}\")..."
-    );
+    println!("🦜 Rolling {count} times (Range: [{min}, {max}), Seed: \"{seed_str}\")...");
 
     // 4. Run the simulation
     for _ in 0..count {
