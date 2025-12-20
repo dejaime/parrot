@@ -1,5 +1,87 @@
 use crate::hash::fnv1a_64;
 
+/// A trait for types that can be generated within a range.
+pub trait RandomRange {
+    /// Generates a random value in the range [`min`, `max`).
+    fn generate_range(rng: &mut Parrot, min: Self, max: Self) -> Self;
+}
+
+impl RandomRange for u64 {
+    fn generate_range(rng: &mut Parrot, min: u64, max: u64) -> u64 {
+        assert!(min < max, "min must be less than max");
+        let range = max.wrapping_sub(min);
+        let random_value = rng.next_u64();
+        random_value % range + min
+    }
+}
+
+impl RandomRange for i64 {
+    fn generate_range(rng: &mut Parrot, min: i64, max: i64) -> i64 {
+        assert!(min < max, "min must be less than max");
+        let range = (max as u64).wrapping_sub(min as u64);
+        let random_value = rng.next_u64();
+        let offset = random_value % range;
+        min.wrapping_add(offset as i64)
+    }
+}
+
+impl RandomRange for i32 {
+    fn generate_range(rng: &mut Parrot, min: i32, max: i32) -> i32 {
+        assert!(min < max, "min must be less than max");
+        let range = (max as u32).wrapping_sub(min as u32);
+        let random_value = rng.next_u64() as u32;
+        let offset = random_value % range;
+        min.wrapping_add(offset as i32)
+    }
+}
+
+impl RandomRange for u32 {
+    fn generate_range(rng: &mut Parrot, min: u32, max: u32) -> u32 {
+        assert!(min < max, "min must be less than max");
+        let range = max.wrapping_sub(min);
+        let random_value = rng.next_u32();
+        random_value % range + min
+    }
+}
+
+impl RandomRange for u8 {
+    fn generate_range(rng: &mut Parrot, min: u8, max: u8) -> u8 {
+        debug_assert!(min < max, "Parrot::gen_range: min must be < max");
+        let range = max.wrapping_sub(min);
+        let random_value = rng.next_u32(); 
+        (random_value % (range as u32)) as u8 + min
+    }
+}
+
+impl RandomRange for u16 {
+    fn generate_range(rng: &mut Parrot, min: u16, max: u16) -> u16 {
+        debug_assert!(min < max, "Parrot::gen_range: min must be < max");
+        let range = max.wrapping_sub(min);
+        let random_value = rng.next_u32();
+        (random_value % (range as u32)) as u16 + min
+    }
+}
+
+impl RandomRange for i8 {
+    fn generate_range(rng: &mut Parrot, min: i8, max: i8) -> i8 {
+        debug_assert!(min < max, "Parrot::gen_range: min must be < max");
+        let range = (max as u8).wrapping_sub(min as u8);
+        let random_value = rng.next_u32();
+        let offset = (random_value % (range as u32)) as u8;
+        min.wrapping_add(offset as i8)
+    }
+}
+
+impl RandomRange for i16 {
+    fn generate_range(rng: &mut Parrot, min: i16, max: i16) -> i16 {
+        debug_assert!(min < max, "Parrot::gen_range: min must be < max");
+        let range = (max as u16).wrapping_sub(min as u16);
+        let random_value = rng.next_u32();
+        let offset = (random_value % (range as u32)) as u16;
+        min.wrapping_add(offset as i16)
+    }
+}
+
 /// A strictly deterministic, lightweight random number generator.
 ///
 /// `Parrot` uses the **Xoroshiro128+** algorithm. It is designed to be:
@@ -77,9 +159,25 @@ impl Parrot {
         result
     }
 
-    /// Generates a random integer in the range `[min, max)`.
+    /// Generates a random `u32`.
+    pub fn next_u32(&mut self) -> u32 {
+        self.next_u64() as u32
+    }
+
+    /// Generates a random `i64`.
+    pub fn next_i64(&mut self) -> i64 {
+        self.next_u64() as i64
+    }
+
+    /// Generates a random `i32`.
+    pub fn next_i32(&mut self) -> i32 {
+        self.next_u64() as i32
+    }
+
+    /// Generates a random value in the range `[min, max)`.
     ///
     /// The result is inclusive of `min` and exclusive of `max`.
+    /// Supports `u64`, `i64`, and `i32`.
     ///
     /// # Panics
     ///
@@ -91,13 +189,10 @@ impl Parrot {
     /// use parrot::Parrot;
     ///
     /// let mut rng = Parrot::new(42);
-    /// let n = rng.gen_range(10, 20); // 10 <= n < 20
+    /// let n = rng.gen_range(10, 20); // 10 <= n < 20 (inferred as i32)
     /// ```
-    pub fn gen_range(&mut self, min: u64, max: u64) -> u64 {
-        assert!(min < max, "min must be less than max");
-        let range = max.wrapping_sub(min);
-        let random_value = self.next_u64();
-        random_value % range + min
+    pub fn gen_range<T: RandomRange>(&mut self, min: T, max: T) -> T {
+        T::generate_range(self, min, max)
     }
 
     /// Generates a random floating-point number in the range `[0.0, 1.0)`.

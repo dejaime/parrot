@@ -55,4 +55,5 @@ pub mod parrot;
 pub mod perlin;
 
 pub use parrot::Parrot;
+pub use parrot::RandomRange;
 pub use perlin::Perlin;

@@ -6,9 +6,9 @@ fn test_golden_values() {
     let mut rng = Parrot::new(42);
 
     // Validated on 2024-12-19 using examples/run_rng.rs
-    let v1 = rng.gen_range(0, 100);
-    let v2 = rng.gen_range(0, 100);
-    let v3 = rng.gen_range(0, 100);
+    let v1:u64 = rng.gen_range(0, 100);
+    let v2:u64 = rng.gen_range(0, 100);
+    let v3:u64 = rng.gen_range(0, 100);
 
     assert_eq!(v1, 0, "First random value for seed 42 changed!");
     assert_eq!(v2, 52, "Second random value for seed 42 changed!");
@@ -116,4 +116,54 @@ fn test_string_seeds() {
     let mut rng_empty = Parrot::new_from_str("");
     let val_empty = rng_empty.gen_range(0, 100);
     assert_eq!(Parrot::new_from_str("").gen_range(0, 100), val_empty);
+}
+
+// 7. ALL TYPE IMPLEMENTATIONS
+// This tests whether we broke any of the different supported type implementations.
+#[test]
+fn test_all_types_golden_master() {
+    // 1. Setup: Fixed seed 42
+    let mut rng = Parrot::new(42);
+
+	// Warm the state up with a few rolls
+	rng.next_u64();
+	rng.next_u32();
+	rng.next_f64();
+	rng.next_i64();
+	rng.next_i32();
+
+    // 2. Raw Generation Methods
+    let val_u64 = rng.next_u64();
+    let val_u32 = rng.next_u32();
+    let val_f64 = rng.next_f64();
+    let val_i64 = rng.next_i64();
+    let val_i32 = rng.next_i32();
+
+    // 3. Range Generation
+    // Unsigned
+    let r_u8    = rng.gen_range(0u8, 255u8);
+    let r_u16   = rng.gen_range(0u16, 60000u16);
+    let r_u32   = rng.gen_range(0u32, 1_000_000u32);
+    let r_u64   = rng.gen_range(0u64, 1_000_000_000u64);
+
+    // Signed (Checking negative handling)
+    let r_i8    = rng.gen_range(-128i8, 127i8);
+    let r_i16   = rng.gen_range(-30000i16, 30000i16);
+    let r_i32   = rng.gen_range(-1_000_000i32, 1_000_000i32);
+    let r_i64   = rng.gen_range(-1_000_000_000i64, 1_000_000_000i64);
+
+    // 4. THE ASSERTIONS
+    assert_eq!(val_u64, 7_475_650_928_872_339_516);
+	assert_eq!(val_u32, 3_869_560_137);
+	assert_eq!(val_f64, 0.5172911093517228);
+	assert_eq!(val_i64, -2_386_844_406_815_626_415);
+	assert_eq!(val_i32, 270_911_811);
+	assert_eq!(r_u8, 192);
+	assert_eq!(r_u16, 47_673);
+	assert_eq!(r_u32, 596_181);
+	assert_eq!(r_u64, 932_484_304);
+	assert_eq!(r_i8, -128);
+	assert_eq!(r_i16, 14_409);
+	assert_eq!(r_i32, 47_250);
+	assert_eq!(r_i64, -122_564_466);
 }
