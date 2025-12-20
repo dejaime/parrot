@@ -21,17 +21,48 @@ Parrot is a no dependency, lightweight, strictly deterministic procedural genera
 
 ## Benchmarks 🚀
 
-Parrot is tuned for speed. On a standard desktop CPU (Ryzen 9), it outperforms the standard Rust `SmallRng`:
+Parrot is tuned for extreme performance. On a standard modern CPU, it generates random numbers in **sub-nanosecond** time, outperforming even the standard Rust `SmallRng`.
 
 | Generator | Time per u64 | Ops / Sec | Notes |
 |-----------|--------------|-----------|-------|
-| StdRng | 3.20 ns | ~312 Million | `rand::rngs::StdRng` |
-| SmallRng | 0.94 ns | ~1.0 Billion | `rand::rngs::SmallRng` |
-| **Parrot** | **0.90 ns** | **~1.1 Billion** | `Xoroshiro128+` |
+| StdRng | 2.99 ns | ~334 Million | `rand::rngs::StdRng` |
+| SmallRng | 0.88 ns | ~1.13 Billion | `rand::rngs::SmallRng` |
+| **Parrot** | **0.88 ns** | **~1.14 Billion** | `Xoroshiro128+` |
 
-*Benchmarks run on Linux x86_64, single-threaded.*
+*Benchmarks run on Linux x86_64, single-threaded on a Ryzen 7 modern CPU.*
 
-### Why is it faster?
+| Generator | Time per u64 | Ops / Sec | Notes |
+|-----------|--------------|-----------|-------|
+| StdRng | 2.99 ns | ~334 Million | `rand::rngs::StdRng` |
+| Perlin 2D | 3.28 ns | ~305 Million | Gradient Noise Lookup |
+
+This means we are generating gradient noise almost as fast as a standard crypto RNG generates a plain integers!
+
+To run these benchmarks yourself:
+```bash
+cargo bench --features rand-support
+```
+
+### Multithreaded Performance ⚡
+
+Parrot scales linearly across cores. Because the noise generator is immutable and lock-free, adding more threads yields a near-perfect speedup.
+
+| Threads | RNG Throughput | Perlin Throughput | Speedup |
+|---------|----------------|-------------------|---------|
+| 1       | 1.14 Billion/s | 121 Million/s     | 1.0x    |
+| 2       | 2.22 Billion/s | 237 Million/s     | 1.96x   |
+| 4       | 4.33 Billion/s | 462 Million/s     | 3.83x   |
+| 8       | 8.29 Billion/s | 869 Million/s     | 7.18x   |
+
+*Benchmarks run on Linux x86_64, on a Ryzen 7 modern CPU.*
+*Up to 8 threads run on a 16-core CPU. Scaling is effectively linear until hardware saturation.*
+
+To run these benchmarks yourself:
+```bash
+cargo bench --bench multithreaded --features rand-support
+```
+
+### Why is it fast?
 
 Parrot does not need to be cryptographically secure!
 

@@ -18,30 +18,30 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set up Rust
-      run: rustup update stable
+      - name: Set up Rust
+        run: rustup update stable
 
-    # 1. Standard Build
-    - name: Build
-      run: cargo build --verbose
+      # 1. Standard Build
+      - name: Build
+        run: cargo build --verbose
 
-    # 2. Test Default Features
-    - name: Run Tests (Default)
-      run: cargo test --verbose
+      # 2. Test Default Features
+      - name: Run Tests (Default)
+        run: cargo test --verbose
 
-    # 3. Test rand support
-    - name: Run Tests (Feature: rand-support)
-      run: cargo test --verbose --features rand-support
+      # 3. Test rand support
+      - name: Run Tests (Feature: rand-support)
+        run: cargo test --verbose --features rand-support
 
-    # 4. Check Benchmarks compiles
-    - name: Check Benchmarks Compile
-      run: cargo bench --verbose --features rand-support --no-run
+      # 4. Check Standard Benchmarks Compile
+      - name: Check Benchmarks Compile
+        run: cargo bench --verbose --features rand-support --no-run
 
-    # 5. Verify Examples
-    - name: Run Example Sanity Check
-      run: cargo run --example run_rng_range -- hello 0 10 1000
+      # 5. Verify Examples
+      - name: Run Example Sanity Check
+        run: cargo run --example run_rng_range -- hello 0 10 1000
 
   lint:
     name: Lint & Fmt
@@ -56,4 +56,3 @@ jobs:
 
       - name: Check Clippy (Lints)
         run: cargo clippy --features rand-support -- -D warnings
-

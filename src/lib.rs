@@ -51,8 +51,8 @@
 //! ```
 
 pub mod hash;
-pub mod noise;
+pub mod perlin;
 pub mod parrot;
 
-pub use noise::Perlin;
+pub use perlin::Perlin;
 pub use parrot::Parrot;

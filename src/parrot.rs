@@ -15,6 +15,7 @@ use crate::hash::fnv1a_64;
 /// let mut rng = Parrot::new(12345);
 /// let val = rng.gen_range(0, 100);
 /// ```
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Parrot {
     state: [u64; 2],
 }
