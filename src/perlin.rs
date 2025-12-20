@@ -25,7 +25,7 @@ use crate::hash::fnv1a_64;
 /// ```
 #[derive(Debug, Clone)]
 pub struct Perlin {
-	// 512 is too big for implicit copy.
+    // 512 is too big for implicit copy.
     // 512 bytes is small enough for stack/embedded usage.
     // This table replaces the on-the-fly RNG calls during generation.
     perm: [u8; 512],

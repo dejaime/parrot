@@ -1,6 +1,6 @@
 use parrot::Perlin;
-use std::env;
 use std::collections::hash_map::DefaultHasher;
+use std::env;
 use std::hash::{Hash, Hasher};
 
 fn main() {
