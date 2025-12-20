@@ -18,8 +18,8 @@ fn test_compatibility_with_rand_ecosystem() {
     data.shuffle(&mut rng);
 
     // 4. Verify it actually did something
-    println!("Original: {:?}", original);
-    println!("Shuffled: {:?}", data);
+    println!("Original: {original:?}");
+    println!("Shuffled: {data:?}");
 
     assert_ne!(data, original, "The vector should be shuffled!");
 

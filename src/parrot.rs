@@ -58,13 +58,13 @@ impl Parrot {
 
         rng.state[1] = seed.wrapping_mul(6364136223846793005);
         for _ in 0..10 {
-            rng.next();
+            rng.next_u64();
         }
         rng
     }
 
     #[inline(always)]
-    pub fn next_64(&mut self) -> u64 {
+    pub fn next_u64(&mut self) -> u64 {
         // Xoroxiro is multiplication based, a 0 seed can only generate 0
         let state0 = self.state[0];
         let mut state1 = self.state[1];
@@ -77,13 +77,6 @@ impl Parrot {
         result
     }
 
-    /// Generates a random `u64`.
-    ///
-    /// This is a shortcut for `next()`.
-    #[inline(always)]
-    pub fn next(&mut self) -> u64 {
-        self.next_64()
-    }
 
     /// Generates a random integer in the range `[min, max)`.
     ///
@@ -104,7 +97,7 @@ impl Parrot {
     pub fn gen_range(&mut self, min: u64, max: u64) -> u64 {
         assert!(min < max, "min must be less than max");
         let range = max.wrapping_sub(min);
-        let random_value = self.next();
+        let random_value = self.next_u64();
         random_value % range + min
     }
 
@@ -122,7 +115,7 @@ impl Parrot {
     /// let f = rng.next_f64(); // 0.0 <= f < 1.0
     /// ```
     pub fn next_f64(&mut self) -> f64 {
-        let random_value = self.next();
+        let random_value = self.next_u64();
         (random_value >> 11) as f64 / (1u64 << 53) as f64
     }
 }
@@ -134,11 +127,11 @@ use rand_core::{Error, RngCore};
 impl RngCore for Parrot {
     fn next_u32(&mut self) -> u32 {
         // We just truncate the u64. This is standard practice.
-        self.next() as u32
+        self.next_u64() as u32
     }
 
     fn next_u64(&mut self) -> u64 {
-        self.next()
+        self.next_u64()
     }
 
     fn fill_bytes(&mut self, dest: &mut [u8]) {

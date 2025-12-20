@@ -29,8 +29,7 @@ fn main() {
     let mut counts: BTreeMap<u64, usize> = BTreeMap::new();
 
     println!(
-        "🦜 Rolling {} times (Range: [{}, {}), Seed: \"{}\")...",
-        count, min, max, seed_str
+        "🦜 Rolling {count} times (Range: [{min}, {max}), Seed: \"{seed_str}\")..."
     );
 
     // 4. Run the simulation
@@ -45,6 +44,6 @@ fn main() {
 
     for (val, &c) in &counts {
         let percent = (c as f64 / count as f64) * 100.0;
-        println!("{:<10} | {:<10} | {:<6.2}%", val, c, percent);
+        println!("{val:<10} | {c:<10} | {percent:<6.2}%");
     }
 }

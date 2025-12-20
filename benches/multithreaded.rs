@@ -15,7 +15,7 @@ fn bench_parrot_scaling(c: &mut Criterion) {
 
     // Total operations to distribute across threads
     let total_ops = 1_000_000;
-    group.throughput(Throughput::Elements(total_ops as u64));
+    group.throughput(Throughput::Elements(total_ops));
 
     let max_threads = num_cpus::get();
     let mut thread_counts = vec![1, 2, 4, 8, 16];
@@ -32,7 +32,7 @@ fn bench_parrot_scaling(c: &mut Criterion) {
             &threads,
             |b, &t_count| {
                 b.iter_custom(|iters| {
-                    let batch_size = total_ops * iters as u64;
+                    let batch_size = total_ops * iters;
                     let ops_per_thread = batch_size / t_count as u64;
 
                     let start = std::time::Instant::now();
@@ -69,7 +69,7 @@ fn bench_parrot_scaling(c: &mut Criterion) {
 fn bench_perlin_scaling(c: &mut Criterion) {
     let mut group = c.benchmark_group("Perlin Scaling (Throughput)");
     let total_ops = 100_000;
-    group.throughput(Throughput::Elements(total_ops as u64));
+    group.throughput(Throughput::Elements(total_ops));
 
     let perlin = Arc::new(Perlin::new(12345));
 
@@ -89,7 +89,7 @@ fn bench_perlin_scaling(c: &mut Criterion) {
                 let perlin_ref = perlin.clone();
 
                 b.iter_custom(move |iters| {
-                    let batch_size = total_ops * iters as u64;
+                    let batch_size = total_ops * iters;
                     let ops_per_thread = batch_size / t_count as u64;
 
                     let start = std::time::Instant::now();

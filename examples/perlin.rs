@@ -28,8 +28,8 @@ fn main() {
     let scale = 0.15;
 
     println!("Parrot Perlin Noise Demo");
-    println!("Input: \"{}\" (Seed: {})", seed_input, seed);
-    println!("Size: {}x{}", width, height);
+    println!("Input: \"{seed_input}\" (Seed: {seed})");
+    println!("Size: {width}x{height}");
     println!("{:-<1$}", "", width);
 
     // 3. Generate the map
@@ -49,7 +49,7 @@ fn main() {
                 ' ' // Deep Water
             };
 
-            print!("{}", symbol);
+            print!("{symbol}");
         }
         println!();
     }
