@@ -77,7 +77,6 @@ impl Parrot {
         result
     }
 
-
     /// Generates a random integer in the range `[min, max)`.
     ///
     /// The result is inclusive of `min` and exclusive of `max`.

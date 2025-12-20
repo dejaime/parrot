@@ -158,7 +158,7 @@ Bash
 # Roll a 10-sided die (0-10) 500,000 times
 
 Output:
-``shell
+```shell
 $ cargo run --release --example run_rng_range -- "test_seed" 0 10 500000
 
 🦜 Rolling 500000 times (Range: [0, 10), Seed: "test_seed")...
