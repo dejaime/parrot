@@ -9,15 +9,13 @@ Parrot is a no dependency, lightweight, strictly deterministic procedural genera
 
 ## Features
 
-    Lightweight: Implements Xoroshiro128+ for high-performance random number generation.
+- Lightweight: Implements Xoroshiro128+ for high-performance random number generation.
 
-    Embedded Ready: no_std by default, supports anything from ARM to WASM to embedded use cases.
+- Embedded Ready: no_std by default, supports anything from ARM to WASM to embedded use cases.
 
-	String Seeding: Use `u64` or `str` seeds for creative products and games!
+- Convenient Seeding: Use `u64` or `str` seeds for creative products and games!
 
-    Deterministic Perlin Noise: Spatially coherent 2D noise that uses a static permutation table (no "TV static" artifacts or mutable state).
-
-    Thread Safe Perlin Noise: The noise generator is immutable (&self) and can be shared across threads without locking.
+- Deterministic and Thread Safe Perlin Noise: Spatially coherent 2D noise that uses a static permutation table (no "TV static" artifacts or mutable state). The noise generator is immutable (&self) and can be shared across threads without locking.
 
 ## Benchmarks 🚀
 
@@ -76,14 +74,14 @@ Add this to your Cargo.toml:
 
 ```toml
 [dependencies]
-parrot = "0.2.0"
+parrot = "0.3.0"
 ```
 
 Or alternativelly, if you want `rand` support:
 
 ```toml
 [dependencies]
-parrot-rng = { version = "0.2.0", features = ["rand-support"] }
+parrot-rng = { version = "0.3.0", features = ["rand-support"] }
 ```
 
 ## Usage
