@@ -48,7 +48,7 @@ impl RandomRange for u8 {
     fn generate_range(rng: &mut Parrot, min: u8, max: u8) -> u8 {
         debug_assert!(min < max, "Parrot::gen_range: min must be < max");
         let range = max.wrapping_sub(min);
-        let random_value = rng.next_u32(); 
+        let random_value = rng.next_u32();
         (random_value % (range as u32)) as u8 + min
     }
 }
