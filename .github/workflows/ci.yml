@@ -28,11 +28,11 @@ jobs:
         run: cargo build --verbose
 
       # 2. Test Default Features
-      - name: Run Tests (Default)
+      - name: "Run Tests (Default)"
         run: cargo test --verbose
 
       # 3. Test rand support
-      - name: Run Tests (Feature: rand-support)
+      - name: "Run Tests (Feature: rand-support)"
         run: cargo test --verbose --features rand-support
 
       # 4. Check Standard Benchmarks Compile
