@@ -9,17 +9,17 @@ Parrot is a no dependency, lightweight, strictly deterministic procedural genera
 
 ## Features
 
-- Lightweight: Implements Xoroshiro128+ for high-performance random number generation.
+- **Lightweight**: Implements Xoroshiro128+ for high-performance random number generation.
 
-- Embedded Ready: no_std by default, supports anything from ARM to WASM to embedded use cases.
+- **Embedded Ready**: no_std by default, supports anything from ARM to WASM to embedded use cases.
 
-- Convenient Seeding: Use `u64` or `str` seeds for creative products and games!
+- **Convenient Seeding**: Use `u64` or `str` seeds for creative products and games!
 
-- Deterministic and Thread Safe Perlin Noise: Spatially coherent 2D noise that uses a static permutation table (no "TV static" artifacts or mutable state). The noise generator is immutable (&self) and can be shared across threads without locking.
+- **Deterministic and Thread Safe Perlin Noise**: Spatially coherent 2D noise that uses a static permutation table (no "TV static" artifacts or mutable state). The noise generator is immutable (&self) and can be shared across threads without locking.
 
-- Serde Support: need to save and load the current generator state? Easy done with serde support.
+- **Serde Support**: need to save and load the current generator state? Easy done with serde support.
 
-- Bevy Support: first class implementations for the basic Bevy Engine types, including spatial vectors (e.g. Vec3), Colors and more.
+- **Bevy Support**: first class implementations for the basic Bevy Engine types, including spatial vectors (e.g. Vec3), Colors and more.
 
 ## Installation
 
