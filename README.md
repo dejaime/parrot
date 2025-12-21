@@ -24,14 +24,14 @@ Add this to your Cargo.toml:
 
 ```toml
 [dependencies]
-parrot-rng = "0.4.1"
+parrot-rng = "0.5.0"
 ```
 
 Or alternatively, if you want `rand` support:
 
 ```toml
 [dependencies]
-parrot-rng = { version = "0.4.1", features = ["rand-support"] }
+parrot-rng = { version = "0.5.0", features = ["rand-support"] }
 ```
 
 ## Usage
