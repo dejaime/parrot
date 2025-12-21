@@ -31,6 +31,7 @@ panic = "abort"
 
 [features]
 default = []
+std = []
 rand-support = ["dep:rand_core"]
 bevy-support = ["dep:bevy", "std"]
 serde-support = ["dep:serde"]
@@ -44,6 +45,7 @@ serde = { version = "1.0", features = ["derive"], optional = true, default-featu
 num_cpus = "1.16.0"
 rand = { version = "0.8", features = ["small_rng"] }
 criterion = "0.5"
+serde_json = "1.0.145"
 
 [[bench]]
 name = "benchmark"

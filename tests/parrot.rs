@@ -167,3 +167,36 @@ fn test_all_types_golden_master() {
     assert_eq!(r_i32, 47_250);
     assert_eq!(r_i64, -122_564_466);
 }
+
+#[test]
+fn test_long_sequence_integrity() {
+    // 1. Setup with the standard seed
+    let mut rng = Parrot::new(42);
+
+    // 2. Accumulators for our checksum
+    // We use a simple custom rolling hash to avoid external dependencies like CRC32.
+    // This ensures that order matters (e.g., [A, B] produces a different hash than [B, A]).
+    let mut hash: u64 = 0;
+
+    // 3. Generate a large sequence (10,000 iterations)
+    for _ in 0..10_000 {
+        let val = rng.next_u64();
+        // A. XOR the value into the hash
+        hash ^= val;
+        // B. Rotate to ensure position dependence (so 0x1 then 0x2 != 0x2 then 0x1)
+        hash = hash.rotate_left(7);
+        // C. A wrapping add to mix bits further
+        hash = hash.wrapping_add(0x9E3779B97F4A7C15); // Golden Ratio constant
+    }
+
+    // 4. THE ASSERTION
+    // When you run this for the first time, it will FAIL.
+    // Copy the "actual" value from the failure message and paste it here.
+    // This becomes your frozen Golden Master.
+    let expected_hash = 16_825_235_463_253_233_775;
+
+    assert_eq!(
+        hash, expected_hash,
+        "Long-sequence checksum mismatch! The RNG algorithm has changed."
+    );
+}
