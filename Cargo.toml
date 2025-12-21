@@ -32,12 +32,12 @@ panic = "abort"
 [features]
 default = []
 rand-support = ["dep:rand_core"]
-bevy-support = ["dep:bevy"]
+bevy-support = ["dep:bevy", "std"]
 serde-support = ["dep:serde"]
 
 [dependencies]
 rand_core = { version = "0.6", optional = true, default-features = false }
-bevy = { version = "0.17", optional = true, default-features = false }
+bevy = { version = "0.17", optional = true, default-features = false, features = ["bevy_color"] }
 serde = { version = "1.0", features = ["derive"], optional = true, default-features = false }
 
 [dev-dependencies]
@@ -52,4 +52,3 @@ harness = false
 [[bench]]
 name = "multithreaded"
 harness = false
-# required-features = ["rand-support"]

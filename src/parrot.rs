@@ -46,7 +46,7 @@ impl RandomRange for u32 {
 
 impl RandomRange for u8 {
     fn generate_range(rng: &mut Parrot, min: u8, max: u8) -> u8 {
-        debug_assert!(min < max, "Parrot::gen_range: min must be < max");
+        assert!(min < max, "Parrot::gen_range: min must be < max");
         let range = max.wrapping_sub(min);
         let random_value = rng.next_u32();
         (random_value % (range as u32)) as u8 + min
@@ -55,7 +55,7 @@ impl RandomRange for u8 {
 
 impl RandomRange for u16 {
     fn generate_range(rng: &mut Parrot, min: u16, max: u16) -> u16 {
-        debug_assert!(min < max, "Parrot::gen_range: min must be < max");
+        assert!(min < max, "Parrot::gen_range: min must be < max");
         let range = max.wrapping_sub(min);
         let random_value = rng.next_u32();
         (random_value % (range as u32)) as u16 + min
@@ -64,7 +64,7 @@ impl RandomRange for u16 {
 
 impl RandomRange for i8 {
     fn generate_range(rng: &mut Parrot, min: i8, max: i8) -> i8 {
-        debug_assert!(min < max, "Parrot::gen_range: min must be < max");
+        assert!(min < max, "Parrot::gen_range: min must be < max");
         let range = (max as u8).wrapping_sub(min as u8);
         let random_value = rng.next_u32();
         let offset = (random_value % (range as u32)) as u8;
@@ -74,7 +74,7 @@ impl RandomRange for i8 {
 
 impl RandomRange for i16 {
     fn generate_range(rng: &mut Parrot, min: i16, max: i16) -> i16 {
-        debug_assert!(min < max, "Parrot::gen_range: min must be < max");
+        assert!(min < max, "Parrot::gen_range: min must be < max");
         let range = (max as u16).wrapping_sub(min as u16);
         let random_value = rng.next_u32();
         let offset = (random_value % (range as u32)) as u16;
@@ -93,8 +93,7 @@ impl RandomRange for f32 {
     fn generate_range(rng: &mut Parrot, min: f32, max: f32) -> f32 {
         assert!(min < max, "min must be less than max");
         let range = max - min;
-        // We use next_f64 for better precision before casting down
-        min + range * (rng.next_f64() as f32)
+        min + range * (rng.next_f32())
     }
 }
 
@@ -114,7 +113,10 @@ impl RandomRange for f32 {
 /// let val = rng.gen_range(0, 100);
 /// ```
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[cfg_attr(feature = "serde-support", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(
+    feature = "serde-support",
+    derive(serde::Serialize, serde::Deserialize)
+)]
 pub struct Parrot {
     state: [u64; 2],
 }
@@ -242,6 +244,17 @@ impl Parrot {
     pub fn next_f64(&mut self) -> f64 {
         let random_value = self.next_u64();
         (random_value >> 11) as f64 / (1u64 << 53) as f64
+    }
+
+    /// Generates a random `f32` in the range `[0.0, 1.0)`.
+    ///
+    /// Technically, the max value generated would be 0.99999976...
+    ///
+    /// This implementation uses 22 bits of randomness (dropping 2 bits of precision)
+    /// to reduce floating point variation between platforms (effectively making it an "f30").
+    pub fn next_f32(&mut self) -> f32 {
+        let random_value = self.next_u64();
+        (random_value >> 42) as f32 / (1u64 << 22) as f32
     }
 }
 

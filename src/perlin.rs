@@ -24,8 +24,8 @@ use crate::hash::fnv1a_64;
 /// println!("Noise value: {}", value);
 /// ```
 #[derive(Debug, Clone)]
-#[cfg_attr(feature = "serde-support", derive(serde::Serialize, serde::Deserialize))]
-#[cfg_attr(feature = "serde-support", serde(from = "u64", into = "u64"))]
+#[cfg_attr(feature = "serde-support", derive(serde::Deserialize))]
+#[cfg_attr(feature = "serde-support", serde(from = "PerlinSeed"))] // Use a specific proxy
 pub struct Perlin {
     // 512 is too big for implicit copy.
     // 512 bytes is small enough for stack/embedded usage.
@@ -191,5 +191,37 @@ impl From<u64> for Perlin {
 impl From<Perlin> for u64 {
     fn from(perlin: Perlin) -> Self {
         perlin.seed
+    }
+}
+
+// Proxy used for serialization. We don't need to serialize the entire
+//	512 state, only the seed.
+#[cfg(feature = "serde-support")]
+#[derive(serde::Serialize, serde::Deserialize)]
+struct PerlinSeed(u64);
+
+#[cfg(feature = "serde-support")]
+impl From<Perlin> for PerlinSeed {
+    fn from(p: Perlin) -> Self {
+        PerlinSeed(p.seed)
+    }
+}
+
+#[cfg(feature = "serde-support")]
+impl From<PerlinSeed> for Perlin {
+    fn from(s: PerlinSeed) -> Self {
+        Perlin::new(s.0)
+    }
+}
+
+#[cfg(feature = "serde-support")]
+impl serde::Serialize for Perlin {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        // We construct the proxy wrapper cheaply (it's just a u64)
+        // and serialize that. No cloning of the 512-byte 'perm' array!
+        PerlinSeed(self.seed).serialize(serializer)
     }
 }

@@ -1,4 +1,4 @@
-#![no_std]
+#![cfg_attr(not(feature = "std"), no_std)]
 
 //! # Parrot RNG 🦜
 //!
@@ -54,6 +54,12 @@ pub mod hash;
 pub mod parrot;
 pub mod perlin;
 
+#[cfg(feature = "bevy-support")]
+pub mod bevy_ext;
+
 pub use parrot::Parrot;
 pub use parrot::RandomRange;
 pub use perlin::Perlin;
+
+#[cfg(feature = "bevy-support")]
+pub use bevy_ext::ParrotBevyExt;
