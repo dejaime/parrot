@@ -17,6 +17,9 @@ Parrot is a no dependency, lightweight, strictly deterministic procedural genera
 
 - Deterministic and Thread Safe Perlin Noise: Spatially coherent 2D noise that uses a static permutation table (no "TV static" artifacts or mutable state). The noise generator is immutable (&self) and can be shared across threads without locking.
 
+- Serde Support: need to save and load the current generator state? Easy done with serde support.
+
+- Bevy Support: first class implementations for the basic Bevy Engine types, including spatial vectors (e.g. Vec3), Colors and more.
 
 ## Installation
 
@@ -24,14 +27,14 @@ Add this to your Cargo.toml:
 
 ```toml
 [dependencies]
-parrot-rng = "0.5.0"
+parrot-rng = "0.6.0"
 ```
 
-Or alternatively, if you want `rand` support:
+Or alternatively, if don't need `no_std` and want more features, pick and choose:
 
 ```toml
 [dependencies]
-parrot-rng = { version = "0.5.0", features = ["rand-support"] }
+parrot-rng = { version = "0.6.0", features = ["rand-support", "serde-support", "bevy-support"] }
 ```
 
 ## Usage

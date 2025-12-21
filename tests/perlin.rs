@@ -16,6 +16,6 @@ fn test_noise_string_seeds() {
     assert_eq!(
         noise_str.noise2d(1.0, 2.0),
         noise_val,
-        "Perlin noise from string seed is not deterministic"
+        "TEST Failed: Perlin noise from string seed was not deterministic"
     );
 }
