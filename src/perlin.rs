@@ -24,11 +24,14 @@ use crate::hash::fnv1a_64;
 /// println!("Noise value: {}", value);
 /// ```
 #[derive(Debug, Clone)]
+#[cfg_attr(feature = "serde-support", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde-support", serde(from = "u64", into = "u64"))]
 pub struct Perlin {
     // 512 is too big for implicit copy.
     // 512 bytes is small enough for stack/embedded usage.
     // This table replaces the on-the-fly RNG calls during generation.
     perm: [u8; 512],
+    seed: u64,
 }
 
 impl Perlin {
@@ -65,7 +68,7 @@ impl Perlin {
         perm[0..256].copy_from_slice(&p);
         perm[256..512].copy_from_slice(&p);
 
-        Perlin { perm }
+        Perlin { perm, seed }
     }
 
     /// Creates a new Perlin noise generator from a string seed.
@@ -176,5 +179,17 @@ impl Perlin {
                 Self::grad(bb, x_frac - 1.0, y_frac - 1.0),
             ),
         )
+    }
+}
+
+impl From<u64> for Perlin {
+    fn from(seed: u64) -> Self {
+        Self::new(seed)
+    }
+}
+
+impl From<Perlin> for u64 {
+    fn from(perlin: Perlin) -> Self {
+        perlin.seed
     }
 }

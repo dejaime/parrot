@@ -114,6 +114,7 @@ impl RandomRange for f32 {
 /// let val = rng.gen_range(0, 100);
 /// ```
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde-support", derive(serde::Serialize, serde::Deserialize))]
 pub struct Parrot {
     state: [u64; 2],
 }
