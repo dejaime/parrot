@@ -32,10 +32,12 @@ panic = "abort"
 [features]
 default = []
 rand-support = ["dep:rand_core"]
+bevy-support = ["dep:bevy"]
 
 [dependencies]
 # Optional dependency for rand compatibility (e.g. allows use of `rand::seq::SliceRandom`)
-rand_core = { version = "0.6", default-features = false, optional = true }
+rand_core = { version = "0.6", optional = true, default-features = false }
+bevy = { version = "0.17", optional = true, default-features = false }
 
 [dev-dependencies]
 num_cpus = "1.16.0"

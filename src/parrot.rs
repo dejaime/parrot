@@ -82,6 +82,22 @@ impl RandomRange for i16 {
     }
 }
 
+impl RandomRange for f64 {
+    fn generate_range(rng: &mut Parrot, min: f64, max: f64) -> f64 {
+        assert!(min < max, "min must be less than max");
+        min + (max - min) * rng.next_f64()
+    }
+}
+
+impl RandomRange for f32 {
+    fn generate_range(rng: &mut Parrot, min: f32, max: f32) -> f32 {
+        assert!(min < max, "min must be less than max");
+        let range = max - min;
+        // We use next_f64 for better precision before casting down
+        min + range * (rng.next_f64() as f32)
+    }
+}
+
 /// A strictly deterministic, lightweight random number generator.
 ///
 /// `Parrot` uses the **Xoroshiro128+** algorithm. It is designed to be:
@@ -195,6 +211,20 @@ impl Parrot {
         T::generate_range(self, min, max)
     }
 
+    /// Generates a boolean value with a specified probability of being true.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use parrot::Parrot;
+    ///
+    /// let mut rng = Parrot::new(42);
+    /// let is_crit = rng.gen_bool(0.05); // 5% chance
+    /// ```
+    pub fn gen_bool(&mut self, probability: f64) -> bool {
+        self.next_f64() < probability
+    }
+
     /// Generates a random floating-point number in the range `[0.0, 1.0)`.
     ///
     /// This implementation generates 53 bits of randomness for the significand,
@@ -221,7 +251,7 @@ use rand_core::{Error, RngCore};
 impl RngCore for Parrot {
     fn next_u32(&mut self) -> u32 {
         // We just truncate the u64. This is standard practice.
-        self.next_u64() as u32
+        self.next_u32()
     }
 
     fn next_u64(&mut self) -> u64 {

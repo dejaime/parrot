@@ -188,7 +188,7 @@ Parrot is tuned for extreme performance. On a standard modern CPU, it generates 
 | StdRng | 2.99 ns | ~334 Million | `rand::rngs::StdRng` |
 | Perlin 2D | 3.28 ns | ~305 Million | Gradient Noise Lookup |
 
-This means we are generating gradient noise almost as fast as a standard crypto RNG generates a plain integers!
+This means we are generating gradient noise almost as fast as a standard RNG generates plain integers!
 
 To run these benchmarks yourself:
 ```bash
@@ -221,6 +221,64 @@ Parrot does not need to be cryptographically secure!
 The security requirements are different for a deterministic random number generator. We do not have to be cryptographically secure as `StdRng` does.
 
 Parrot is not supposed to be used in high security sensitive contexts, and can optimise for speed.
+
+## Bevy Integration
+
+Enable Bevy Engine integration with the `"bevy-support"` feature.
+
+```toml
+[dependencies]
+parrot-rng = { version = "0.4.1", features = ["rand-support", "bevy-support"] }
+```
+
+### 1. Global Deterministic RNG (Resource)
+
+Add `Parrot` as a resource to share a single random number generator across systems.
+
+```rust
+use bevy::prelude::*;
+use parrot::Parrot;
+
+fn main() {
+    App::new()
+        .insert_resource(Parrot::new_from_str(player_defined_seed))
+        .add_systems(Update, print_d20_roll)
+        .run();
+}
+
+fn print_d20_roll(mut rng: ResMut<Parrot>) {
+    // Generate a number from 1 to 20
+    println!("Player rolled a: {}", rng.gen_range(1, 21)); //[1, 21)
+}
+```
+
+### 2. Context-Specific RNG (Component)
+
+Attach `Parrot` to entities to ensure their behavior remains deterministic regardless of system execution order.
+
+```rust
+use bevy::prelude::*;
+use parrot::Parrot;
+
+#[derive(Component)]
+struct Npc {
+    rng: Parrot,
+}
+
+fn spawn_npc(mut commands: Commands) {
+    commands.spawn(Npc {
+        rng: Parrot::new(global_seed + entity_id),
+    });
+}
+
+fn npc_decision(mut query: Query<&mut Npc>) {
+    for mut npc in &mut query {
+        if npc.rng.gen_bool(0.25) { //25%
+            println!("NPC decided to move!");
+        }
+    }
+}
+```
 
 ## License
 
