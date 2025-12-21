@@ -1,27 +1,9 @@
 use crate::Parrot;
+use crate::RandomRange;
 use bevy::prelude::*;
 
 /// Extension methods for generating Bevy-specific types
 pub trait ParrotBevyExt {
-    /// Generates a random IVec2 within the given bounds (min inclusive, max exclusive).
-    /// Perfect for Tilemaps.
-    fn gen_ivec2(&mut self, min: IVec2, max: IVec2) -> IVec2;
-
-    /// Generates a random Vec2 within the given rectangular bounds.
-    fn gen_vec2(&mut self, min: Vec2, max: Vec2) -> Vec2;
-
-    /// Generates a random Vec3 within the given rectangular bounds.
-    fn gen_vec3(&mut self, min: Vec3, max: Vec3) -> Vec3;
-
-    /// Generates a random IVec3 within the given bounds (min inclusive, max exclusive).
-    fn gen_ivec3(&mut self, min: IVec3, max: IVec3) -> IVec3;
-
-    /// Generates a random UVec2 within the given bounds (min inclusive, max exclusive).
-    fn gen_uvec2(&mut self, min: UVec2, max: UVec2) -> UVec2;
-
-    /// Generates a random UVec3 within the given bounds (min inclusive, max exclusive).
-    fn gen_uvec3(&mut self, min: UVec3, max: UVec3) -> UVec3;
-
     /// Generates a random standard Color (sRGB).
     fn gen_color_srgb(&mut self) -> Color;
 
@@ -60,47 +42,6 @@ pub trait ParrotBevyExt {
 }
 
 impl ParrotBevyExt for Parrot {
-    fn gen_ivec2(&mut self, min: IVec2, max: IVec2) -> IVec2 {
-        IVec2::new(self.gen_range(min.x, max.x), self.gen_range(min.y, max.y))
-    }
-
-    fn gen_vec2(&mut self, min: Vec2, max: Vec2) -> Vec2 {
-        Vec2::new(
-            // We assume you implemented a gen_range_f32 or similar
-            // If not, cast up/down:
-            self.gen_range(min.x, max.x),
-            self.gen_range(min.y, max.y),
-        )
-    }
-
-    fn gen_vec3(&mut self, min: Vec3, max: Vec3) -> Vec3 {
-        Vec3::new(
-            self.gen_range(min.x, max.x),
-            self.gen_range(min.y, max.y),
-            self.gen_range(min.z, max.z),
-        )
-    }
-
-    fn gen_ivec3(&mut self, min: IVec3, max: IVec3) -> IVec3 {
-        IVec3::new(
-            self.gen_range(min.x, max.x),
-            self.gen_range(min.y, max.y),
-            self.gen_range(min.z, max.z),
-        )
-    }
-
-    fn gen_uvec2(&mut self, min: UVec2, max: UVec2) -> UVec2 {
-        UVec2::new(self.gen_range(min.x, max.x), self.gen_range(min.y, max.y))
-    }
-
-    fn gen_uvec3(&mut self, min: UVec3, max: UVec3) -> UVec3 {
-        UVec3::new(
-            self.gen_range(min.x, max.x),
-            self.gen_range(min.y, max.y),
-            self.gen_range(min.z, max.z),
-        )
-    }
-
     fn gen_color_srgb(&mut self) -> Color {
         // Generate random RGB float components [0.0, 1.0]
         Color::srgb(self.next_f32(), self.next_f32(), self.next_f32())
@@ -176,5 +117,53 @@ impl ParrotBevyExt for Parrot {
         let r = radius * (self.next_f32()).cbrt();
         let dir = self.gen_dir3();
         dir.as_vec3() * r
+    }
+}
+
+impl RandomRange for IVec2 {
+    fn generate_range(rng: &mut Parrot, min: Self, max: Self) -> Self {
+        IVec2::new(rng.gen_range(min.x, max.x), rng.gen_range(min.y, max.y))
+    }
+}
+
+impl RandomRange for Vec2 {
+    fn generate_range(rng: &mut Parrot, min: Self, max: Self) -> Self {
+        Vec2::new(rng.gen_range(min.x, max.x), rng.gen_range(min.y, max.y))
+    }
+}
+
+impl RandomRange for Vec3 {
+    fn generate_range(rng: &mut Parrot, min: Self, max: Self) -> Self {
+        Vec3::new(
+            rng.gen_range(min.x, max.x),
+            rng.gen_range(min.y, max.y),
+            rng.gen_range(min.z, max.z),
+        )
+    }
+}
+
+impl RandomRange for IVec3 {
+    fn generate_range(rng: &mut Parrot, min: Self, max: Self) -> Self {
+        IVec3::new(
+            rng.gen_range(min.x, max.x),
+            rng.gen_range(min.y, max.y),
+            rng.gen_range(min.z, max.z),
+        )
+    }
+}
+
+impl RandomRange for UVec2 {
+    fn generate_range(rng: &mut Parrot, min: Self, max: Self) -> Self {
+        UVec2::new(rng.gen_range(min.x, max.x), rng.gen_range(min.y, max.y))
+    }
+}
+
+impl RandomRange for UVec3 {
+    fn generate_range(rng: &mut Parrot, min: Self, max: Self) -> Self {
+        UVec3::new(
+            rng.gen_range(min.x, max.x),
+            rng.gen_range(min.y, max.y),
+            rng.gen_range(min.z, max.z),
+        )
     }
 }

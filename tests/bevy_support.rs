@@ -9,12 +9,12 @@ fn test_bevy_determinism() {
     let mut rng1 = Parrot::new(999);
     let mut rng2 = Parrot::new(999);
 
-    let v1 = rng1.gen_vec3(Vec3::ZERO, Vec3::ONE);
-    let v2 = rng2.gen_vec3(Vec3::ZERO, Vec3::ONE);
+    let v1: Vec3 = rng1.gen_range(Vec3::ZERO, Vec3::ONE);
+    let v2: Vec3 = rng2.gen_range(Vec3::ZERO, Vec3::ONE);
     assert_eq!(v1, v2);
 
-    let v3 = rng1.gen_vec3(Vec3::ZERO, Vec3::ONE);
-    let v4 = rng2.gen_vec3(Vec3::ZERO, Vec3::ONE);
+    let v3: Vec3 = rng1.gen_range(Vec3::ZERO, Vec3::ONE);
+    let v4: Vec3 = rng2.gen_range(Vec3::ZERO, Vec3::ONE);
     assert_eq!(v3, v4);
 }
 
@@ -26,7 +26,7 @@ fn test_geometric_bounds() {
     let min = Vec2::new(10.0, 10.0);
     let max = Vec2::new(20.0, 20.0);
     for _ in 0..10 {
-        let v = rng.gen_vec2(min, max);
+        let v: Vec2 = rng.gen_range(min, max);
         assert!(v.x >= 10.0 && v.x < 20.0);
         assert!(v.y >= 10.0 && v.y < 20.0);
     }
