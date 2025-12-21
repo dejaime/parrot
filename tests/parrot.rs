@@ -189,12 +189,7 @@ fn test_long_sequence_integrity() {
         hash = hash.wrapping_add(0x9E3779B97F4A7C15); // Golden Ratio constant
     }
 
-    // 4. THE ASSERTION
-    // When you run this for the first time, it will FAIL.
-    // Copy the "actual" value from the failure message and paste it here.
-    // This becomes your frozen Golden Master.
-    let expected_hash = 16_825_235_463_253_233_775;
-
+    let expected_hash = 0xE97F3E828983906F;
     assert_eq!(
         hash, expected_hash,
         "Long-sequence checksum mismatch! The RNG algorithm has changed."
