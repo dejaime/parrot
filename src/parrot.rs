@@ -214,6 +214,22 @@ impl Parrot {
         T::generate_range(self, min, max)
     }
 
+    /// Generates a random value in the range `[min, max)` using a `Range` object.
+    ///
+    /// This is a convenience method for `gen_range` that accepts a `Range`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use parrot::Parrot;
+    ///
+    /// let mut rng = Parrot::new(42);
+    /// let n = rng.gen_in_range(10..20);
+    /// ```
+    pub fn gen_in_range<T: RandomRange>(&mut self, range: core::ops::Range<T>) -> T {
+        self.gen_range(range.start, range.end)
+    }
+
     /// Generates a boolean value with a specified probability of being true.
     ///
     /// # Example
