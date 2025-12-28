@@ -3,7 +3,7 @@
 [![CI](https://github.com/dejaime/parrot/actions/workflows/ci.yml/badge.svg)](https://github.com/dejaime/parrot/actions/workflows/ci.yml)
 [![Crates.io](https://img.shields.io/crates/v/parrot-rng.svg)](https://crates.io/crates/parrot-rng)
 
-Parrot is a no dependency, lightweight, strictly deterministic procedural generation library for Rust. It is designed to produce identical results across all platforms (x86, ARM, WASM) and is fully compatible with embedded (no_std) environments.
+Parrot is a no dependency, lightweight, strictly deterministic procedural generation library for Rust. It is designed to produce identical results across all platforms (`x86`, `ARM`, `WASM`) and is fully compatible with embedded (`no_s`) environments.
 
 [![Documentation](https://docs.rs/crate/parrot-rng/latest)](https://docs.rs/crate/parrot-rng/latest)
 
@@ -11,7 +11,7 @@ Parrot is a no dependency, lightweight, strictly deterministic procedural genera
 
 - **Lightweight**: Implements Xoroshiro128+ for high-performance random number generation.
 
-- **Embedded Ready**: no_std by default, supports anything from ARM to WASM to embedded use cases.
+- **Embedded Ready**: `no_std` by default, supports anything from ARM to WASM to embedded use cases.
 
 - **Convenient Seeding**: Use `u64` or `str` seeds for creative products and games!
 
