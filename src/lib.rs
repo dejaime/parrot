@@ -19,7 +19,7 @@
 //! ## Quick Start: RNG
 //!
 //! ```rust
-//! use parrot::Parrot;
+//! use parrot::prelude::*;
 //!
 //! // Create a new RNG from a seed
 //! let mut rng = Parrot::new(42);
@@ -36,7 +36,7 @@
 //! ## Quick Start: Perlin Noise
 //!
 //! ```rust
-//! use parrot::Perlin;
+//! use parrot::prelude::*;
 //!
 //! // Create a Perlin noise generator from a seed
 //! let noise = Perlin::new(123);
@@ -53,6 +53,7 @@
 pub mod hash;
 pub mod parrot;
 pub mod perlin;
+pub mod prelude;
 
 #[cfg(feature = "bevy-support")]
 pub mod bevy_ext;

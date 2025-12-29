@@ -27,14 +27,14 @@ Add this to your Cargo.toml:
 
 ```toml
 [dependencies]
-parrot-rng = "0.7.1"
+parrot-rng = "0.7.2"
 ```
 
 Or alternatively, if don't need `no_std` and want more features, pick and choose:
 
 ```toml
 [dependencies]
-parrot-rng = { version = "0.7.1", features = ["rand-support", "serde-support", "bevy-support"] }
+parrot-rng = { version = "0.7.2", features = ["rand-support", "serde-support", "bevy-support"] }
 ```
 
 ## Usage
@@ -43,7 +43,7 @@ parrot-rng = { version = "0.7.1", features = ["rand-support", "serde-support", "
 Generate numbers that are guaranteed to be the same on every machine for a given seed.
 
 ```rust
-use parrot::Parrot;
+use parrot::prelude::*;
 
 fn main() {
     // Use a string or a u64 seed
@@ -62,7 +62,7 @@ fn main() {
 
 Generate smooth, continuous noise for terrain, clouds, or textures.
 ```rust
-use parrot::Perlin;
+use parrot::prelude::*;
 
 fn main() {
     // The seed determines the "shape" of the terrain
@@ -82,7 +82,7 @@ Requires `features = ["rand-support"]`
 
 Parrot can act as a standard RngCore, allowing you to use it with the rest of the Rust ecosystem.
 ```rust
-use parrot::Parrot;
+use parrot::prelude::*;
 use rand::seq::SliceRandom; // From the 'rand' crate
 
 fn main() {
@@ -240,7 +240,7 @@ Add `Parrot` as a resource to share a single random number generator across syst
 
 ```rust
 use bevy::prelude::*;
-use parrot::Parrot;
+use parrot::prelude::*;
 
 fn main() {
     App::new()
@@ -261,7 +261,7 @@ Attach `Parrot` to entities to ensure their behavior remains deterministic regar
 
 ```rust
 use bevy::prelude::*;
-use parrot::Parrot;
+use parrot::prelude::*;
 
 #[derive(Component)]
 struct Npc {
