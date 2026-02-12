@@ -59,6 +59,7 @@ pub mod prelude;
 pub mod bevy_ext;
 
 pub use parrot::Parrot;
+pub use parrot::ParrotRng;
 pub use parrot::RandomRange;
 pub use perlin::Perlin;
 

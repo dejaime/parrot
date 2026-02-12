@@ -1,6 +1,7 @@
 //! The parrot prelude.
 
 pub use crate::Parrot;
+pub use crate::ParrotRng;
 pub use crate::Perlin;
 pub use crate::RandomRange;
 pub use crate::hash::hash;

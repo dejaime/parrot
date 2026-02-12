@@ -121,6 +121,9 @@ pub struct Parrot {
     state: [u64; 2],
 }
 
+/// A type alias for [`Parrot`].
+pub type ParrotRng = Parrot;
+
 impl Parrot {
     /// Creates a new RNG instance seeded from a string.
     ///

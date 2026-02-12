@@ -195,3 +195,20 @@ fn test_long_sequence_integrity() {
         "Long-sequence checksum mismatch! The RNG algorithm has changed."
     );
 }
+
+#[test]
+fn test_parrot_rng_alias() {
+    use parrot::{Parrot, ParrotRng};
+
+    // 1. Instantiate via Alias
+    let mut rng: ParrotRng = ParrotRng::new(42);
+
+    // 2. Verify behavior matches Parrot (Golden Value check)
+    // First value for seed 42 in range [0, 100) is 0.
+    assert_eq!(rng.gen_range(0u64, 100u64), 0);
+
+    // 3. Verify Type Identity
+    // Since it's a type alias, we should be able to assign it to a variable of type Parrot
+    let mut rng_base: Parrot = rng;
+    assert_eq!(rng_base.gen_range(0u64, 100u64), 52);
+}
