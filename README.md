@@ -27,14 +27,14 @@ Add this to your Cargo.toml:
 
 ```toml
 [dependencies]
-parrot-rng = "0.7.2"
+parrot-rng = "0.7.3"
 ```
 
 Or alternatively, if don't need `no_std` and want more features, pick and choose:
 
 ```toml
 [dependencies]
-parrot-rng = { version = "0.7.2", features = ["rand-support", "serde-support", "bevy-support"] }
+parrot-rng = { version = "0.7.3", features = ["rand-support", "serde-support", "bevy-support"] }
 ```
 
 ## Usage
