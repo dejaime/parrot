@@ -157,7 +157,7 @@ You can then verify this behavior using the demo example, which hardcodes these 
 Verify the uniformity of the RNG by simulating a large number of die rolls.
 Bash
 
-### Roll a 10-sided die (0-10) 500,000 times
+### Roll a 10-sided die (0-9) 500,000 times
 
 Output:
 ```shell
