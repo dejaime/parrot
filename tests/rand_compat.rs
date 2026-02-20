@@ -5,6 +5,7 @@ fn test_compatibility_with_rand_ecosystem() {
     // We import this trait from the `rand` crate.
     // If Parrot didn't implement RngCore, this would fail to compile.
     use rand::seq::SliceRandom;
+    use rand::SeedableRng;
 
     // 1. Create our Parrot RNG
     let mut rng = Parrot::new(42);
@@ -35,4 +36,10 @@ fn test_compatibility_with_rand_ecosystem() {
         data, data2,
         "Shuffling should be deterministic given the same seed"
     );
+
+    // 6. Test "Splitting" (SeedableRng::from_rng)
+    // This allows creating a new independent RNG from an existing one
+    let mut child_rng = Parrot::from_rng(&mut rng).expect("Failed to create RNG from RNG");
+    let _val = child_rng.next_u64();
+    assert_ne!(rng.next_u64(), child_rng.next_u64());
 }

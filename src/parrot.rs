@@ -99,7 +99,7 @@ impl RandomRange for f32 {
 
 /// A strictly deterministic, lightweight random number generator.
 ///
-/// `Parrot` uses the **Xoroshiro128+** algorithm. It is designed to be:
+/// `Parrot` uses the **Xoroshiro128\*\*** algorithm. It is designed to be:
 /// - **Fast:** Suitable for real-time applications (games, simulations).
 /// - **Portable:** Guarantees the same sequence of numbers on any architecture (x86, ARM, WASM).
 /// - **Embedded-friendly:** Uses a small state (16 bytes) and works in `no_std` environments.
@@ -169,11 +169,13 @@ impl Parrot {
 
     #[inline(always)]
     pub fn next_u64(&mut self) -> u64 {
-        // Xoroxiro is multiplication based, a 0 seed can only generate 0
         let state0 = self.state[0];
         let mut state1 = self.state[1];
-        let result = state0.wrapping_add(state1);
+        
+        // The xoroshiro128** scrambler: multiply, rotate, multiply
+        let result = state0.wrapping_mul(5).rotate_left(7).wrapping_mul(9);
 
+        // The state transition remains completely identical
         state1 ^= state0;
         self.state[0] = state0.rotate_left(24) ^ state1 ^ (state1 << 16);
         self.state[1] = state1.rotate_left(37);
@@ -278,7 +280,7 @@ impl Parrot {
 }
 
 #[cfg(feature = "rand-support")]
-use rand_core::{Error, RngCore};
+use rand_core::{Error, RngCore, SeedableRng};
 
 #[cfg(feature = "rand-support")]
 impl RngCore for Parrot {
@@ -299,5 +301,25 @@ impl RngCore for Parrot {
     fn try_fill_bytes(&mut self, dest: &mut [u8]) -> Result<(), Error> {
         self.fill_bytes(dest);
         Ok(())
+    }
+}
+
+#[cfg(feature = "rand-support")]
+impl SeedableRng for Parrot {
+    type Seed = [u8; 16];
+
+    fn from_seed(seed: Self::Seed) -> Self {
+        let s0 = u64::from_le_bytes(seed[0..8].try_into().unwrap());
+        let s1 = u64::from_le_bytes(seed[8..16].try_into().unwrap());
+
+        if s0 == 0 && s1 == 0 {
+            return Parrot::new(0);
+        }
+
+        Parrot { state: [s0, s1] }
+    }
+
+    fn seed_from_u64(state: u64) -> Self {
+        Self::new(state)
     }
 }

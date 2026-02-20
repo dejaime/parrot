@@ -10,9 +10,9 @@ fn test_golden_values() {
     let v2: u64 = rng.gen_range(0, 100);
     let v3: u64 = rng.gen_range(0, 100);
 
-    assert_eq!(v1, 0, "First random value for seed 42 changed!");
-    assert_eq!(v2, 52, "Second random value for seed 42 changed!");
-    assert_eq!(v3, 87, "Third random value for seed 42 changed!");
+    assert_eq!(v1, 52, "First random value for seed 42 changed!");
+    assert_eq!(v2, 80, "Second random value for seed 42 changed!");
+    assert_eq!(v3, 11, "Third random value for seed 42 changed!");
 }
 
 // 2. THE AVALANCHE TEST
@@ -153,19 +153,19 @@ fn test_all_types_golden_master() {
     let r_i64 = rng.gen_range(-1_000_000_000i64, 1_000_000_000i64);
 
     // 4. THE ASSERTIONS
-    assert_eq!(val_u64, 7_475_650_928_872_339_516);
-    assert_eq!(val_u32, 3_869_560_137);
-    assert_eq!(val_f64, 0.5172911093517228);
-    assert_eq!(val_i64, -2_386_844_406_815_626_415);
-    assert_eq!(val_i32, 270_911_811);
-    assert_eq!(r_u8, 192);
-    assert_eq!(r_u16, 47_673);
-    assert_eq!(r_u32, 596_181);
-    assert_eq!(r_u64, 932_484_304);
-    assert_eq!(r_i8, -128);
-    assert_eq!(r_i16, 14_409);
-    assert_eq!(r_i32, 47_250);
-    assert_eq!(r_i64, -122_564_466);
+    assert_eq!(val_u64, 6_015_211_170_407_401_693);
+    assert_eq!(val_u32, 1_217_301_087);
+    assert_eq!(val_f64, 0.14723110273312523);
+    assert_eq!(val_i64, 466_446_975_417_854_016);
+    assert_eq!(val_i32, 370_039_161);
+    assert_eq!(r_u8, 115);
+    assert_eq!(r_u16, 49_597);
+    assert_eq!(r_u32, 542_147);
+    assert_eq!(r_u64, 270_835_505);
+    assert_eq!(r_i8, -57);
+    assert_eq!(r_i16, 14_089);
+    assert_eq!(r_i32, -293_073);
+    assert_eq!(r_i64, -732_041_528);
 }
 
 #[test]
@@ -189,7 +189,7 @@ fn test_long_sequence_integrity() {
         hash = hash.wrapping_add(0x9E3779B97F4A7C15); // Golden Ratio constant
     }
 
-    let expected_hash = 0xE97F3E828983906F;
+    let expected_hash = 15370814124256169305;
     assert_eq!(
         hash, expected_hash,
         "Long-sequence checksum mismatch! The RNG algorithm has changed."
@@ -204,11 +204,11 @@ fn test_parrot_rng_alias() {
     let mut rng: ParrotRng = ParrotRng::new(42);
 
     // 2. Verify behavior matches Parrot (Golden Value check)
-    // First value for seed 42 in range [0, 100) is 0.
-    assert_eq!(rng.gen_range(0u64, 100u64), 0);
+    // First value for seed 42 in range [0, 100) is 52.
+    assert_eq!(rng.gen_range(0u64, 100u64), 52);
 
     // 3. Verify Type Identity
     // Since it's a type alias, we should be able to assign it to a variable of type Parrot
     let mut rng_base: Parrot = rng;
-    assert_eq!(rng_base.gen_range(0u64, 100u64), 52);
+    assert_eq!(rng_base.gen_range(0u64, 100u64), 80);
 }

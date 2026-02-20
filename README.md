@@ -9,7 +9,7 @@ Parrot is a no dependency, lightweight, strictly deterministic procedural genera
 
 ## Features
 
-- **Lightweight**: Implements Xoroshiro128+ for high-performance random number generation.
+- **Lightweight**: Implements Xoroshiro128** for high-performance random number generation.
 
 - **Embedded Ready**: `no_std` by default, supports anything from ARM to WASM to embedded use cases.
 
