@@ -183,7 +183,7 @@ Parrot is tuned for extreme performance. On a standard modern CPU, it generates 
 |-----------|--------------|-----------|-------|
 | StdRng | 2.99 ns | ~334 Million | `rand::rngs::StdRng` |
 | SmallRng | 0.88 ns | ~1.13 Billion | `rand::rngs::SmallRng` |
-| **Parrot** | **0.88 ns** | **~1.14 Billion** | `Xoroshiro128+` |
+| **Parrot** | **0.88 ns** | **~1.14 Billion** | `Xoroshiro128**` |
 
 *Benchmarks run on Linux x86_64, single-threaded on a Ryzen 7 modern CPU.*
 
