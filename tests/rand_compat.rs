@@ -4,8 +4,8 @@ fn test_compatibility_with_rand_ecosystem() {
     use parrot::Parrot;
     // We import this trait from the `rand` crate.
     // If Parrot didn't implement RngCore, this would fail to compile.
-    use rand::seq::SliceRandom;
     use rand::SeedableRng;
+    use rand::seq::SliceRandom;
 
     // 1. Create our Parrot RNG
     let mut rng = Parrot::new(42);

@@ -171,7 +171,7 @@ impl Parrot {
     pub fn next_u64(&mut self) -> u64 {
         let state0 = self.state[0];
         let mut state1 = self.state[1];
-        
+
         // The xoroshiro128** scrambler: multiply, rotate, multiply
         let result = state0.wrapping_mul(5).rotate_left(7).wrapping_mul(9);
 
