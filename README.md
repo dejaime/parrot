@@ -27,14 +27,14 @@ Add this to your Cargo.toml:
 
 ```toml
 [dependencies]
-parrot-rng = "0.8.0"
+parrot-rng = "0.8.1"
 ```
 
 Or alternatively, if don't need `no_std` and want more features, pick and choose:
 
 ```toml
 [dependencies]
-parrot-rng = { version = "0.8.0", features = ["rand-support", "serde-support", "bevy-support"] }
+parrot-rng = { version = "0.8.1", features = ["rand-support", "serde-support", "bevy-support"] }
 ```
 
 ## Usage
@@ -232,7 +232,7 @@ Enable Bevy Engine integration with the `"bevy-support"` feature.
 
 ```toml
 [dependencies]
-parrot-rng = { version = "0.8.0", features = ["rand-support", "bevy-support"] }
+parrot-rng = { version = "0.8.1", features = ["rand-support", "bevy-support"] }
 ```
 
 ### 1. Global Deterministic RNG (Resource)

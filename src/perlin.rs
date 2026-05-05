@@ -180,6 +180,62 @@ impl Perlin {
             ),
         )
     }
+
+    /// Generates a 2D Perlin noise value that seamlessly wraps (tiles) at the given periods.
+    ///
+    /// `wrap_x` and `wrap_y` must be > 0. The noise function will wrap around integer 
+    /// boundaries at the specified periods, creating a seamless repeating pattern.
+    ///
+    /// **Note:** Because the internal permutation table is 256 elements long, the wrap 
+    /// periods must be `<= 256`. 
+    ///
+    /// The output value is always in the range `[-1.0, 1.0]`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use parrot::perlin::Perlin;
+    ///
+    /// let perlin = Perlin::new(42);
+    /// let value = perlin.noise2d_wrapped(10.5, -3.2, 10, 10);
+    /// ```
+    pub fn noise2d_wrapped(&self, x: f64, y: f64, wrap_x: i32, wrap_y: i32) -> f64 {
+        assert!(wrap_x > 0 && wrap_x <= 256, "wrap_x must be in the range 1..=256");
+        assert!(wrap_y > 0 && wrap_y <= 256, "wrap_y must be in the range 1..=256");
+
+        let x_floor = Self::floor(x);
+        let y_floor = Self::floor(y);
+
+        let mut x0 = x_floor as i32;
+        let mut y0 = y_floor as i32;
+        let mut x1 = x0 + 1;
+        let mut y1 = y0 + 1;
+
+        // Wrap coordinates and mask with 255 to stay within the permutation table bounds
+        x0 = x0.rem_euclid(wrap_x) & 255;
+        x1 = x1.rem_euclid(wrap_x) & 255;
+        y0 = y0.rem_euclid(wrap_y) & 255;
+        y1 = y1.rem_euclid(wrap_y) & 255;
+
+        let x_frac = x - x_floor;
+        let y_frac = y - y_floor;
+
+        let u = Self::fade(x_frac);
+        let v = Self::fade(y_frac);
+
+        let p = &self.perm;
+
+        let aa = p[p[x0 as usize] as usize + y0 as usize];
+        let ab = p[p[x0 as usize] as usize + y1 as usize];
+        let ba = p[p[x1 as usize] as usize + y0 as usize];
+        let bb = p[p[x1 as usize] as usize + y1 as usize];
+
+        Self::lerp(
+            v,
+            Self::lerp(u, Self::grad(aa, x_frac, y_frac), Self::grad(ba, x_frac - 1.0, y_frac)),
+            Self::lerp(u, Self::grad(ab, x_frac, y_frac - 1.0), Self::grad(bb, x_frac - 1.0, y_frac - 1.0)),
+        )
+    }
 }
 
 impl From<u64> for Perlin {
