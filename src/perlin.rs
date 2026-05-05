@@ -183,11 +183,11 @@ impl Perlin {
 
     /// Generates a 2D Perlin noise value that seamlessly wraps (tiles) at the given periods.
     ///
-    /// `wrap_x` and `wrap_y` must be > 0. The noise function will wrap around integer 
+    /// `wrap_x` and `wrap_y` must be > 0. The noise function will wrap around integer
     /// boundaries at the specified periods, creating a seamless repeating pattern.
     ///
-    /// **Note:** Because the internal permutation table is 256 elements long, the wrap 
-    /// periods must be `<= 256`. 
+    /// **Note:** Because the internal permutation table is 256 elements long, the wrap
+    /// periods must be `<= 256`.
     ///
     /// The output value is always in the range `[-1.0, 1.0]`.
     ///
@@ -200,8 +200,14 @@ impl Perlin {
     /// let value = perlin.noise2d_wrapped(10.5, -3.2, 10, 10);
     /// ```
     pub fn noise2d_wrapped(&self, x: f64, y: f64, wrap_x: i32, wrap_y: i32) -> f64 {
-        assert!(wrap_x > 0 && wrap_x <= 256, "wrap_x must be in the range 1..=256");
-        assert!(wrap_y > 0 && wrap_y <= 256, "wrap_y must be in the range 1..=256");
+        assert!(
+            wrap_x > 0 && wrap_x <= 256,
+            "wrap_x must be in the range 1..=256"
+        );
+        assert!(
+            wrap_y > 0 && wrap_y <= 256,
+            "wrap_y must be in the range 1..=256"
+        );
 
         let x_floor = Self::floor(x);
         let y_floor = Self::floor(y);
@@ -232,8 +238,16 @@ impl Perlin {
 
         Self::lerp(
             v,
-            Self::lerp(u, Self::grad(aa, x_frac, y_frac), Self::grad(ba, x_frac - 1.0, y_frac)),
-            Self::lerp(u, Self::grad(ab, x_frac, y_frac - 1.0), Self::grad(bb, x_frac - 1.0, y_frac - 1.0)),
+            Self::lerp(
+                u,
+                Self::grad(aa, x_frac, y_frac),
+                Self::grad(ba, x_frac - 1.0, y_frac),
+            ),
+            Self::lerp(
+                u,
+                Self::grad(ab, x_frac, y_frac - 1.0),
+                Self::grad(bb, x_frac - 1.0, y_frac - 1.0),
+            ),
         )
     }
 }

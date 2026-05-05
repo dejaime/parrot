@@ -33,8 +33,14 @@ fn test_noise_wrapping() {
     // Same relative position but negative wrap offset
     let val3 = noise.noise2d_wrapped(-8.5, -7.5, wrap_x, wrap_y);
 
-    assert_eq!(val1, val2, "Wrapped noise should repeat perfectly at the given period");
-    assert_eq!(val1, val3, "Wrapped noise should handle negative wrapping correctly");
+    assert_eq!(
+        val1, val2,
+        "Wrapped noise should repeat perfectly at the given period"
+    );
+    assert_eq!(
+        val1, val3,
+        "Wrapped noise should handle negative wrapping correctly"
+    );
 
     // 1. Proof of Difference
     // Prove standard noise does NOT naturally repeat at a period of 10
@@ -47,12 +53,20 @@ fn test_noise_wrapping() {
     // 2. Asymmetric and Multi-Period Wrapping
     let asym_val1 = noise.noise2d_wrapped(3.1, 4.2, 10, 20);
     // x is 3 periods away (+30), y is -2 periods away (-40)
-    let asym_val2 = noise.noise2d_wrapped(33.1, -35.8, 10, 20); 
-    assert!((asym_val1 - asym_val2).abs() < 1e-10, "Asymmetric and multi-period wrapping should repeat correctly. Left: {}, Right: {}", asym_val1, asym_val2);
+    let asym_val2 = noise.noise2d_wrapped(33.1, -35.8, 10, 20);
+    assert!(
+        (asym_val1 - asym_val2).abs() < 1e-10,
+        "Asymmetric and multi-period wrapping should repeat correctly. Left: {}, Right: {}",
+        asym_val1,
+        asym_val2
+    );
 
     // 3. The 256 Equivalence
     // Standard noise inherently wraps at 256. Verify our wrapped logic perfectly mirrors it.
     let std_val = noise.noise2d(300.7, -45.3);
     let wrap_256_val = noise.noise2d_wrapped(300.7, -45.3, 256, 256);
-    assert_eq!(std_val, wrap_256_val, "noise2d_wrapped at period 256 should match standard noise2d");
+    assert_eq!(
+        std_val, wrap_256_val,
+        "noise2d_wrapped at period 256 should match standard noise2d"
+    );
 }
