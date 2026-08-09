@@ -15,7 +15,7 @@ Parrot is a no dependency, lightweight, strictly deterministic procedural genera
 
 - **Convenient Seeding**: Use `u64` or `str` seeds for creative products and games!
 
-- **Deterministic and Thread Safe Perlin Noise**: Spatially coherent 2D noise that uses a static permutation table (no "TV static" artifacts or mutable state). The noise generator is immutable (&self) and can be shared across threads without locking.
+- **Deterministic and Thread Safe Perlin Noise**: Spatially coherent 2D and 3D noise that uses a static permutation table (no "TV static" artifacts or mutable state). The noise generator is immutable (&self) and can be shared across threads without locking. `noise2d_wrapped` tiles seamlessly at a chosen period; `noise3d` is what you want for anything that isn't a plane — sampling a sphere through a longitude/latitude parameterisation stretches at the equator, pinches at the poles and needs a seam, and sampling a 3D field at a point on the sphere has none of those.
 
 - **Serde Support**: need to save and load the current generator state? Easy done with serde support.
 
@@ -27,14 +27,14 @@ Add this to your Cargo.toml:
 
 ```toml
 [dependencies]
-parrot-rng = "0.8.1"
+parrot-rng = "0.9.0"
 ```
 
 Or alternatively, if don't need `no_std` and want more features, pick and choose:
 
 ```toml
 [dependencies]
-parrot-rng = { version = "0.8.1", features = ["rand-support", "serde-support", "bevy-support"] }
+parrot-rng = { version = "0.9.0", features = ["rand-support", "serde-support", "bevy-support"] }
 ```
 
 ## Usage
@@ -232,7 +232,7 @@ Enable Bevy Engine integration with the `"bevy-support"` feature.
 
 ```toml
 [dependencies]
-parrot-rng = { version = "0.8.1", features = ["rand-support", "bevy-support"] }
+parrot-rng = { version = "0.9.0", features = ["rand-support", "bevy-support"] }
 ```
 
 ### 1. Global Deterministic RNG (Resource)

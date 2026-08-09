@@ -102,6 +102,15 @@ impl Perlin {
     fn grad(hash: u8, x: f64, y: f64) -> f64 {
         // Standard "Improved Perlin" gradient calculation.
         // Bitwise logic replaces the slow branching if/else chains.
+        // This is `grad3` with z pinned to 0.0 — the 2D case of the same table.
+        Self::grad3(hash, x, y, 0.0)
+    }
+
+    #[inline(always)]
+    fn grad3(hash: u8, x: f64, y: f64, z: f64) -> f64 {
+        // Ken Perlin's improved-noise gradient: the 16 hash values select one of
+        // the 12 midpoints of a cube's edges, which are more evenly spread than
+        // random gradients and so leave no directional bias in the field.
         let h = hash & 15;
         let u = if h < 8 { x } else { y };
         let v = if h < 4 {
@@ -109,7 +118,7 @@ impl Perlin {
         } else if h == 12 || h == 14 {
             x
         } else {
-            0.0
+            z
         };
         (if h & 1 == 0 { u } else { -u }) + (if h & 2 == 0 { v } else { -v })
     }
@@ -247,6 +256,93 @@ impl Perlin {
                 u,
                 Self::grad(ab, x_frac, y_frac - 1.0),
                 Self::grad(bb, x_frac - 1.0, y_frac - 1.0),
+            ),
+        )
+    }
+
+    /// Generates a 3D Perlin noise value for the given coordinates.
+    ///
+    /// The input coordinates can be any `f64` values. The noise function
+    /// will wrap around integer boundaries, so the pattern repeats indefinitely.
+    ///
+    /// The output value is always in the range `[-1.0, 1.0]`, and is exactly
+    /// `0.0` at every integer lattice point.
+    ///
+    /// # When you want this instead of [`Perlin::noise2d`]
+    ///
+    /// Sampling a surface that is not a plane. The usual case is a sphere: a 2D
+    /// field sampled over a longitude/latitude parameterisation is stretched at
+    /// the equator, pinched at the poles, and has a seam down one meridian.
+    /// Sampling a 3D field at a point *on* the sphere has none of those,
+    /// because there is no parameterisation left to distort.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use parrot::perlin::Perlin;
+    ///
+    /// let perlin = Perlin::new(42);
+    /// let value = perlin.noise3d(10.5, -3.2, 0.7);
+    /// ```
+    pub fn noise3d(&self, x: f64, y: f64, z: f64) -> f64 {
+        let x_floor = Self::floor(x);
+        let y_floor = Self::floor(y);
+        let z_floor = Self::floor(z);
+
+        // Mask with 255 to stay within the permutation table bounds
+        let x_int = ((x_floor as i32) & 255) as usize;
+        let y_int = ((y_floor as i32) & 255) as usize;
+        let z_int = ((z_floor as i32) & 255) as usize;
+
+        let x_frac = x - x_floor;
+        let y_frac = y - y_floor;
+        let z_frac = z - z_floor;
+
+        let u = Self::fade(x_frac);
+        let v = Self::fade(y_frac);
+        let w = Self::fade(z_frac);
+
+        let p = &self.perm;
+
+        // HASH LOOKUP for the 8 corners of the containing cube.
+        // Every index below stays under 512: each table value is at most 255
+        // and each addend is at most 255, which is exactly why `perm` is the
+        // doubled 512-entry table rather than a 256-entry one.
+        let a = p[x_int] as usize + y_int;
+        let aa = p[a] as usize + z_int;
+        let ab = p[a + 1] as usize + z_int;
+        let b = p[x_int + 1] as usize + y_int;
+        let ba = p[b] as usize + z_int;
+        let bb = p[b + 1] as usize + z_int;
+
+        // Interpolate between the 8 corners: 4 along x, then 2 along y, then z.
+        Self::lerp(
+            w,
+            Self::lerp(
+                v,
+                Self::lerp(
+                    u,
+                    Self::grad3(p[aa], x_frac, y_frac, z_frac),
+                    Self::grad3(p[ba], x_frac - 1.0, y_frac, z_frac),
+                ),
+                Self::lerp(
+                    u,
+                    Self::grad3(p[ab], x_frac, y_frac - 1.0, z_frac),
+                    Self::grad3(p[bb], x_frac - 1.0, y_frac - 1.0, z_frac),
+                ),
+            ),
+            Self::lerp(
+                v,
+                Self::lerp(
+                    u,
+                    Self::grad3(p[aa + 1], x_frac, y_frac, z_frac - 1.0),
+                    Self::grad3(p[ba + 1], x_frac - 1.0, y_frac, z_frac - 1.0),
+                ),
+                Self::lerp(
+                    u,
+                    Self::grad3(p[ab + 1], x_frac, y_frac - 1.0, z_frac - 1.0),
+                    Self::grad3(p[bb + 1], x_frac - 1.0, y_frac - 1.0, z_frac - 1.0),
+                ),
             ),
         )
     }
